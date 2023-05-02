@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "skyblockcore",
+  "version": "${version}",
+
+  "name": "SkyBlock Core",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Skyblock Mod Developers"
+  ],
+  "contributors": [
+    "Ascynx"
+  ],
+  "contact": {
+    "sources": "https://github.com/SkyBlock-Central/SkyBlock-Core"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "io.github.skyblockcore.SkyblockCore"
+    ]
+  },
+  "mixins": [
+    "skyblockcore.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric-api": "*",
+    "minecraft": "~1.19.4",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
