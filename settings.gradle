@@ -9,4 +9,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Skyblock-Core"
+rootProject.name = "SkyBlock-Core"
