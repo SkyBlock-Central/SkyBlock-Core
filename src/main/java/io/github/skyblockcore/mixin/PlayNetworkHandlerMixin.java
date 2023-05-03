@@ -3,8 +3,11 @@ package io.github.skyblockcore.mixin;
 import com.google.common.collect.Sets;
 import io.github.skyblockcore.SkyblockCore;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
+import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.ScoreboardObjectiveUpdateS2CPacket;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,6 +28,18 @@ public class PlayNetworkHandlerMixin {
         for (String TITLE : SKYBLOCK_TITLES) {
             if (header.contains(TITLE)) JoinSkyblockCallback.EVENT.invoker().interact();
         }
+    }
+
+    @Inject(method = "onDisconnect", at = @At("TAIL"))
+    void onDisconnect(DisconnectS2CPacket packet, CallbackInfo ci) {
+        if (!SkyblockCore.isOnSkyblock()) return;
+        LeaveSkyblockCallback.EVENT.invoker().interact();
+    }
+
+    @Inject(method = "onDisconnected", at = @At("TAIL"))
+    void onDisconnect(Text reason, CallbackInfo ci) {
+        if (!SkyblockCore.isOnSkyblock()) return;
+        LeaveSkyblockCallback.EVENT.invoker().interact();
     }
 
 }
