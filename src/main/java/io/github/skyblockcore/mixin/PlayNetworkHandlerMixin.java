@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import io.github.skyblockcore.SkyblockCore;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
+import io.github.skyblockcore.event.LocationChangedCallback;
+import io.github.skyblockcore.util.TextUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
@@ -60,8 +62,10 @@ public class PlayNetworkHandlerMixin {
         for (ScoreboardPlayerScore score : scores) {
             String line = Team.decorateName(scoreboard.getPlayerTeam(score.getPlayerName()), Text.literal(score.getPlayerName())).getString();
             if (line.contains("\u23E3")) {
-                String split = line.split("\u23E3 ")[1];
-                SkyblockCore.setLocation(split.substring(0, split.length()-2));
+                String location = TextUtils.stripColorCodes(line.split("\u23E3 ")[1]);
+                if (location.equals(SkyblockCore.getLocation())) break;
+                LocationChangedCallback.EVENT.invoker().interact(SkyblockCore.getLocation(), location);
+                break;
             }
         }
     }
