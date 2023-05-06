@@ -8,7 +8,6 @@ import io.github.skyblockcore.event.LocationChangedCallback;
 import io.github.skyblockcore.util.TextUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.ScoreboardObjectiveUpdateS2CPacket;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
@@ -32,23 +31,18 @@ public class PlayNetworkHandlerMixin {
 
     @Inject(method = "onScoreboardObjectiveUpdate", at = @At("TAIL"))
     void onScoreboardDisplay(ScoreboardObjectiveUpdateS2CPacket packet, CallbackInfo ci) {
-        if (SkyblockCore.isOnSkyblock()) return;
-        String header = packet.getDisplayName().getString();
+        boolean onSkyblock = SkyblockCore.isOnSkyblock();
+        Scoreboard scoreboard = this.world.getScoreboard();
+        ScoreboardObjective objective = scoreboard.getObjectiveForSlot(Scoreboard.SIDEBAR_DISPLAY_SLOT_ID);
+        if (objective == null) return;
+        String header = objective.getDisplayName().getString();
         for (String TITLE : SKYBLOCK_TITLES) {
-            if (header.contains(TITLE)) JoinSkyblockCallback.EVENT.invoker().interact();
+            if (header.contains(TITLE)) {
+                if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
+                return;
+            }
         }
-    }
-
-    @Inject(method = "onDisconnect", at = @At("TAIL"))
-    void onDisconnect(DisconnectS2CPacket packet, CallbackInfo ci) {
-        if (!SkyblockCore.isOnSkyblock()) return;
-        LeaveSkyblockCallback.EVENT.invoker().interact();
-    }
-
-    @Inject(method = "onDisconnected", at = @At("TAIL"))
-    void onDisconnect(Text reason, CallbackInfo ci) {
-        if (!SkyblockCore.isOnSkyblock()) return;
-        LeaveSkyblockCallback.EVENT.invoker().interact();
+        if (onSkyblock) LeaveSkyblockCallback.EVENT.invoker().interact();
     }
 
     @Inject(method = "onScoreboardObjectiveUpdate", at = @At("TAIL"))
