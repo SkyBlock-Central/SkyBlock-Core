@@ -1,17 +1,22 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
 	id 'fabric-loom' version '1.2-SNAPSHOT'
 	id 'maven-publish'
+	id 'org.jetbrains.kotlin.jvm' version '1.8.21'
 }
 
 version = project.mod_version
 group = project.maven_group
 
 repositories {
+	mavenCentral()
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven { url = "https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1" }
 }
 
 dependencies {
@@ -22,6 +27,8 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modRuntimeOnly("me.djtheredstoner:DevAuth-fabric:1.1.2")
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
@@ -33,27 +40,31 @@ base {
 	archivesName = project.archives_base_name
 }
 
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+loom {
+	runs {
+		client {
+			property('devauth.enabled', 'true')
+			environment('client')
+			client()
+		}
 	}
 }
 
-tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+processResources {
+	/*
+	IDEA complains with the following message because it is somehow confused by this statement.
+	Ignore the below message, everything works fine.
+	Cannot resolve resource filtering of MatchingCopyAction. IDEA may fail to build project. Consider using delegated build (enabled by default).
+	 */
+	filesMatching('fabric.mod.json'){
+		filter(ReplaceTokens, tokens: [version: project.version])
+	}
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
 }
 
 jar {
@@ -62,7 +73,7 @@ jar {
 	}
 }
 
-// configure the maven publication
+/*// configure the maven publication
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
@@ -77,4 +88,7 @@ publishing {
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
 	}
+}*/
+kotlin {
+	jvmToolchain(17)
 }
