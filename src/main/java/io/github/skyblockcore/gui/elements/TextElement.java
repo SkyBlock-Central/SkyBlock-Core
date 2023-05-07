@@ -8,7 +8,8 @@ public class TextElement extends GuiElement {
     final String text;
     final int x, y, color;
 
-    public TextElement(String value, int x, int y, int color) {
+    public TextElement(String value, int x, int y, int color, String id) {
+        super(id);
         this.text = value;
         this.x = x;
         this.y = y;

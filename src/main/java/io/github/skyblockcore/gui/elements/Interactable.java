@@ -10,6 +10,6 @@ public interface Interactable {
     int getSizeX();
     int getSizeY();
 
-    void interact();
+    default void interact() {};
 
 }

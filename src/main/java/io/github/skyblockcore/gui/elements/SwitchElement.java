@@ -11,7 +11,8 @@ public class SwitchElement extends GuiElement implements Interactable {
 
     boolean enabled;
 
-    public SwitchElement(int enabledX, int enabledY, int disabledX, int disabledY, int offsetX, int offsetY, int sizeX, int sizeY, Identifier texture, boolean startState) {
+    public SwitchElement(int enabledX, int enabledY, int disabledX, int disabledY, int offsetX, int offsetY, int sizeX, int sizeY, Identifier texture, boolean startState, String id) {
+        super(id);
         this.enabledX = enabledX;
         this.enabledY = enabledY;
         this.disabledX = disabledX;

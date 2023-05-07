@@ -6,8 +6,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.skyblockcore.SkyblockCore;
 import io.github.skyblockcore.gui.elements.*;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -64,6 +66,7 @@ public class TexturedGui extends Screen {
 
         for (JsonElement c : components) {
             JsonObject component = c.getAsJsonObject();
+            String id = component.has("id") ? component.get("id").getAsString() : "";
             if (component.get("type").getAsString().equalsIgnoreCase("texture")) {
                 int offsetX = component.getAsJsonArray("position_offset").get(0).getAsInt();
                 int offsetY = component.getAsJsonArray("position_offset").get(1).getAsInt();
@@ -76,7 +79,7 @@ public class TexturedGui extends Screen {
 
                 Identifier texture = component.has("texture") ? getIdentifier(component.get("texture").getAsString()) : gui_texture;
 
-                addElement(new TextureElement(textureX, textureY, sizeX, sizeY, offsetX, offsetY, texture));
+                addElement(new TextureElement(textureX, textureY, sizeX, sizeY, offsetX, offsetY, texture, id));
             }
             else if (component.get("type").getAsString().equalsIgnoreCase("button")) {
                 int sizeX = component.getAsJsonArray("texture_size").get(0).getAsInt();
@@ -96,7 +99,7 @@ public class TexturedGui extends Screen {
 
                 Identifier texture = component.has("texture") ? getIdentifier(component.get("texture").getAsString()) : gui_texture;
 
-                addElement(new ButtonElement(normalX, normalY, hoverX, hoverY, clickedX, clickedY, x, y, sizeX, sizeY, texture));
+                addElement(new ButtonElement(normalX, normalY, hoverX, hoverY, clickedX, clickedY, x, y, sizeX, sizeY, texture, id));
             }
             else if (component.get("type").getAsString().equalsIgnoreCase("text")) {
                 String value = component.get("value").getAsString();
@@ -107,7 +110,7 @@ public class TexturedGui extends Screen {
                 int g = component.getAsJsonArray("color").get(1).getAsInt();
                 int b = component.getAsJsonArray("color").get(2).getAsInt();
 
-                addElement(new TextElement(value, offsetX, offsetY, new Color(r, g, b).getRGB()));
+                addElement(new TextElement(value, offsetX, offsetY, new Color(r, g, b).getRGB(), id));
             }
             else if (component.get("type").getAsString().equalsIgnoreCase("switch")) {
                 int sizeX = component.getAsJsonArray("texture_size").get(0).getAsInt();
@@ -126,7 +129,7 @@ public class TexturedGui extends Screen {
 
                 Identifier texture = component.has("texture") ? getIdentifier(component.get("texture").getAsString()) : gui_texture;
 
-                addElement(new SwitchElement(enabledX, enabledY, disabledX, disabledY, x, y, sizeX, sizeY, texture, state));
+                addElement(new SwitchElement(enabledX, enabledY, disabledX, disabledY, x, y, sizeX, sizeY, texture, state, id));
             }
             else {
                 throw new IllegalArgumentException("Unknown component type.");
@@ -155,11 +158,16 @@ public class TexturedGui extends Screen {
 
         getElements().forEach(guiElement -> {
             if (guiElement instanceof Interactable element) {
-                if (isMouseOver(mouseX, mouseY, element.getScreenX(this), element.getScreenY(this), element.getSizeX(), element.getSizeY())) return;
+                if (!isMouseOver(mouseX, mouseY, element.getScreenX(this), element.getScreenY(this), element.getSizeX(), element.getSizeY())) return;
+                this.elementClicked(mouseX, mouseY, button, guiElement);
                 element.interact();
             }
         });
         return true;
+    }
+
+    public void elementClicked(double mouseX, double mouseY, int button, GuiElement element) {
+
     }
 
     static boolean isMouseOver(double mouseX, double mouseY, int elementX, int elementY, int sizeX, int sizeY) {
@@ -176,12 +184,21 @@ public class TexturedGui extends Screen {
     }
 
     @Override
+    public void tick() {
+        elements.forEach(this::tickElement);
+    }
+
+    public void tickElement(GuiElement element) {
+
+    }
+
+    @Override
     public boolean shouldPause() {
         return false;
     }
 
     private Identifier gui_texture = null;
-    private java.util.List<GuiElement> elements;
+    private List<GuiElement> elements;
     public int defaultX;
     public int defaultY;
     private int textureSizeX;

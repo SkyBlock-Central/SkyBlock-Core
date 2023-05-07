@@ -7,8 +7,11 @@ import net.minecraft.util.Identifier;
 
 public abstract class GuiElement {
 
-    public abstract void render(MatrixStack matrices, int defaultX, int defaultY, int textureWidth, int textureHeight, int mouseX, int mouseY, boolean isMouseDown);
+    private final String id;
+    public GuiElement(String id) { this.id = id; }
+    public String getId() { return id; }
 
+    public abstract void render(MatrixStack matrices, int defaultX, int defaultY, int textureWidth, int textureHeight, int mouseX, int mouseY, boolean isMouseDown);
     /**
      * 
      * @param matrixStack the matrix stack used for rendering

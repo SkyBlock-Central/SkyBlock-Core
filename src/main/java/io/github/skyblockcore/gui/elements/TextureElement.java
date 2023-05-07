@@ -8,7 +8,8 @@ public class TextureElement extends GuiElement {
     final int textureX, textureY, offsetX, offsetY, sizeX, sizeY;
     final Identifier texture;
 
-    public TextureElement(int textureX, int textureY, int textureSizeX, int textureSizeY, int offsetX, int offsetY, Identifier texture) {
+    public TextureElement(int textureX, int textureY, int textureSizeX, int textureSizeY, int offsetX, int offsetY, Identifier texture, String id) {
+        super(id);
         this.offsetX = offsetX;
         this.offsetY = offsetY;
         this.textureX = textureX;

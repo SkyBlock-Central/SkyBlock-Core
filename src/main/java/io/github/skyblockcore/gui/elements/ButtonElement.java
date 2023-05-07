@@ -6,10 +6,20 @@ import net.minecraft.util.Identifier;
 
 public class ButtonElement extends GuiElement implements Interactable {
 
-    final int offsetX, offsetY, normalX, normalY, hoverX, hoverY, clickX, clickY, sizeX, sizeY;
+    int offsetX;
+    int offsetY;
+    final int normalX;
+    final int normalY;
+    final int hoverX;
+    final int hoverY;
+    final int clickX;
+    final int clickY;
+    final int sizeX;
+    final int sizeY;
     final Identifier texture;
 
-    public ButtonElement(int normalX, int normalY, int hoverX, int hoverY, int clickX, int clickY, int offsetX, int offsetY, int sizeX, int sizeY, Identifier texture) {
+    public ButtonElement(int normalX, int normalY, int hoverX, int hoverY, int clickX, int clickY, int offsetX, int offsetY, int sizeX, int sizeY, Identifier texture, String id) {
+        super(id);
         this.normalX = normalX;
         this.normalY = normalY;
         this.hoverX = hoverX;
@@ -65,8 +75,11 @@ public class ButtonElement extends GuiElement implements Interactable {
         return sizeY;
     }
 
-    @Override
-    public void interact() {
-        // do stuff
+    public void setOffsetX(int newOffset) {
+        this.offsetX = newOffset;
+    }
+
+    public void setOffsetY(int newOffset) {
+        this.offsetY = newOffset;
     }
 }
