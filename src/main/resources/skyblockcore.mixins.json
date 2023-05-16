@@ -4,9 +4,11 @@
   "package": "io.github.skyblockcore.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ClientConnectionMixin"
   ],
   "client": [
-    "ExampleMixin"
+    "ExampleMixin",
+    "PlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
