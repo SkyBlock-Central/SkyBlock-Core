@@ -16,12 +16,6 @@
 
 package io.github.skyblockcore;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import io.github.skyblockcore.gui.TestGui;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.gui.screen.Screen;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
@@ -39,7 +33,6 @@ public class SkyblockCore implements ClientModInitializer {
     private static String LOCATION;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
-    Screen setTo = null;
 
     @Override
     public void onInitializeClient() {

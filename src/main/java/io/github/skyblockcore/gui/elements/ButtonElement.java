@@ -75,6 +75,11 @@ public class ButtonElement extends GuiElement implements Interactable {
         return sizeY;
     }
 
+    @Override
+    public void interact() {
+        // TODO; play sound
+    }
+
     public void setOffsetX(int newOffset) {
         this.offsetX = newOffset;
     }
