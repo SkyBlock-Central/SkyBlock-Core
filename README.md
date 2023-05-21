@@ -31,6 +31,8 @@ Contributions are welcome! If you'd like to contribute to SkyBlock-Core, please 
 
 Please ensure that your code follows the existing coding style and conventions.
 
+For more information on how to contribute, please see the [CONTRIBUTING](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/CONTRIBUTING.md) file.
+
 ## License
 
 SkyBlock-Core is licensed under the [Apache License 2.0](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/LICENSE). See the `LICENSE` file for more information.
