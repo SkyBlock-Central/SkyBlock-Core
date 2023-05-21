@@ -1,7 +1,6 @@
 # SkyBlock Core
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/LICENSE)
-[![Discord](https://img.shields.io/badge/Discord-Click_Here-blue)](https://discord.gg/GzHcvZcu8m)
 ## What is SkyBlock Core?
 
 SkyBlock Core is a centralized mod for SkyBlock settings, menus, localization, events, and more. It serves as a foundation for other SkyBlock mods by providing essential functionality and features. With SkyBlock-Core, you can easily build and extend your own SkyBlock experience.
