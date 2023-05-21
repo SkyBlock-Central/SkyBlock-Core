@@ -8,8 +8,9 @@
 ## Setting up a development environment
 
 - Install Java Development Kit version 17 [Eclipse Temurin Download](https://adoptium.net/temurin/releases) for convenience, however any JDK will do.
-- Install Git. [Windows download](https://git-scm.com/download/win)
+- Install Git. [Windows download](https://git-scm.com/download/win) (not required as many IDE's come pre-installed with a git clone ability)
 - Install an IDE, such as [Jetbrains IntelliJ IDEA](https://www.jetbrains.com/idea/download).
+
 
 ### Software configuration
 
