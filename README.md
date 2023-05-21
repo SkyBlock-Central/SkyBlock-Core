@@ -25,12 +25,12 @@ To get started with SkyBlock-Core, you need Java 17 and Fabric 1.19x. Follow the
 
 Contributions are welcome! If you'd like to contribute to SkyBlock-Core, please follow these guidelines:
 
-- Read [The Contributing File](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/CONTRIBUTING.md)
 - Fork the repository.
 - Create a new branch for your feature or bug fix.
 - Commit your changes and push the branch to your fork.
 - Open a pull request explaining your changes.
 
+For more information on how to contribute, please see the [CONTRIBUTING](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/CONTRIBUTING.md) file.\
 Please ensure that your code follows the existing coding style and does not violate the [Hypixel Rules](https://hypixel.net/rules)
 
 ## Questions or Concerns?
