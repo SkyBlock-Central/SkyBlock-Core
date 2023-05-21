@@ -51,5 +51,4 @@ public class SkyblockCore implements ClientModInitializer {
             return ActionResult.PASS;
         }));
     }
-
 }
