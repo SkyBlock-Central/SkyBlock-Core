@@ -1,6 +1,5 @@
 package io.github.skyblockcore.mixin;
 
-import com.google.common.collect.Sets;
 import io.github.skyblockcore.SkyblockCore;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
@@ -24,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collection;
-import java.util.Set;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class PlayNetworkHandlerMixin {
