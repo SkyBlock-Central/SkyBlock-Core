@@ -1,0 +1,212 @@
+{
+  "style": "centered",
+  "variables": {
+    "gui_size": [364, 276],
+    "texture_size": [1024, 1024],
+    "default_offset": [0, -15]
+  },
+  "components": [
+    {
+      "id": "background",
+      "type": "texture",
+      "texture_position": [0, 0],
+      "texture_size": [364, 276],
+      "position_offset": [0, 0]
+    },
+    {
+      "id": "header_text",
+      "type": "text",
+      "value": "Global Trade System",
+      "color": [255, 255, 255],
+      "position_offset": [182, 8]
+    },
+
+    {
+      "id": "background_box1",
+      "type": "texture",
+      "texture_position": [0, 366],
+      "texture_size": [350, 36],
+      "position_offset": [7, 20]
+    },
+    {
+      "id": "background_box2",
+      "type": "texture",
+      "texture_position": [0, 276],
+      "texture_size": [175, 90],
+      "position_offset": [7, 56]
+    },
+    {
+      "id": "background_box3",
+      "type": "texture",
+      "texture_position": [0, 276],
+      "texture_size": [175, 90],
+      "position_offset": [182, 56]
+    },
+    {
+      "id": "background_box4",
+      "type": "texture",
+      "texture_position": [0, 276],
+      "texture_size": [175, 90],
+      "position_offset": [7, 146]
+    },
+    {
+      "id": "background_box4",
+      "type": "texture",
+      "texture_position": [0, 276],
+      "texture_size": [175, 90],
+      "position_offset": [182, 146]
+    },
+    {
+      "id": "background_box5",
+      "type": "texture",
+      "texture_position": [175, 276],
+      "texture_size": [175, 36],
+      "position_offset": [7, 236]
+    },
+    {
+      "id": "background_box6",
+      "type": "texture",
+      "texture_position": [175, 276],
+      "texture_size": [175, 36],
+      "position_offset": [182, 236]
+    },
+
+    {
+      "id": "sales_bg_part1",
+      "type": "texture",
+      "texture_position": [364, 0],
+      "texture_size": [73, 16],
+      "position_offset": [8, 49]
+    },
+    {
+      "id": "sales_bg_part2",
+      "type": "texture",
+      "texture_position": [422, 0],
+      "texture_size": [19, 16],
+      "position_offset": [73, 49]
+    },
+    {
+      "id": "your_sales_text",
+      "type": "text",
+      "value": "Pokemon Sales:",
+      "color": [255, 255, 255],
+      "position_offset": [50, 53]
+    },
+
+    {
+      "id": "your_sales_bg_part1",
+      "type": "texture",
+      "texture_position": [364, 0],
+      "texture_size": [73, 16],
+      "position_offset": [8, 139]
+    },
+    {
+      "id": "your_sales_bg_part2",
+      "type": "texture",
+      "texture_position": [400, 0],
+      "texture_size": [41, 16],
+      "position_offset": [80, 139]
+    },
+    {
+      "id": "sales_text",
+      "type": "text",
+      "value": "Your Pokemon Sales:",
+      "color": [255, 255, 255],
+      "position_offset": [64, 143]
+    },
+
+    {
+      "id": "your_items_bg_part1",
+      "type": "texture",
+      "texture_position": [364, 0],
+      "texture_size": [73, 16],
+      "position_offset": [183, 139]
+    },
+    {
+      "id": "your_items_bg_part2",
+      "type": "texture",
+      "texture_position": [400, 0],
+      "texture_size": [41, 16],
+      "position_offset": [235, 139]
+    },
+    {
+      "id": "items_text",
+      "type": "text",
+      "value": "Your Item Sales:",
+      "color": [255, 255, 255],
+      "position_offset": [228, 143]
+    },
+
+    {
+      "id": "plus_button_box1",
+      "type": "button",
+      "default": [191, 312],
+      "hovered": [223, 312],
+      "clicked": [255, 312],
+      "position_offset": [338, 37],
+      "texture_size": [16, 16]
+    },
+    {
+      "id": "arrow_button_box2",
+      "type": "button",
+      "default": [175, 312],
+      "hovered": [207, 312],
+      "clicked": [239, 312],
+      "position_offset": [163, 127],
+      "texture_size": [16, 16]
+    },
+    {
+      "id": "arrow_button_box3",
+      "type": "button",
+      "default": [175, 312],
+      "hovered": [207, 312],
+      "clicked": [239, 312],
+      "position_offset": [338, 127],
+      "texture_size": [16, 16]
+    },
+    {
+      "id": "arrow_button_box4",
+      "type": "button",
+      "default": [175, 312],
+      "hovered": [207, 312],
+      "clicked": [239, 312],
+      "position_offset": [163, 217],
+      "texture_size": [16, 16]
+    },
+    {
+      "id": "plus_button_box4",
+      "type": "button",
+      "default": [191, 312],
+      "hovered": [223, 312],
+      "clicked": [255, 312],
+      "position_offset": [163, 201],
+      "texture_size": [16, 16]
+    },
+    {
+      "id": "arrow_button_box5",
+      "type": "button",
+      "default": [175, 312],
+      "hovered": [207, 312],
+      "clicked": [239, 312],
+      "position_offset": [338, 217],
+      "texture_size": [16, 16]
+    },
+    {
+      "id": "plus_button_box5",
+      "type": "button",
+      "default": [191, 312],
+      "hovered": [223, 312],
+      "clicked": [255, 312],
+      "position_offset": [338, 201],
+      "texture_size": [16, 16]
+    },
+    {
+      "id": "test_switch",
+      "type": "switch",
+      "disabled": [191, 312],
+      "enabled": [223, 312],
+      "position_offset": [338, 201],
+      "texture_size": [16, 16]
+    }
+  ]
+}
