@@ -1,7 +1,7 @@
 # SkyBlock Core
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/LICENSE)
-[![Discord](https://img.shields.io/badge/Discord-Click_Here-blue)](https://discord.gg/GzHcvZcu8m)
+
 ## What is SkyBlock Core?
 
 SkyBlock Core is a centralized mod for SkyBlock settings, menus, localization, events, and more. It serves as a foundation for other SkyBlock mods by providing essential functionality and features. With SkyBlock-Core, you can easily build and extend your own SkyBlock experience.
@@ -25,13 +25,18 @@ To get started with SkyBlock-Core, you need Java 17 and Fabric 1.19x. Follow the
 
 Contributions are welcome! If you'd like to contribute to SkyBlock-Core, please follow these guidelines:
 
+- Read [The Contributing File](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/CONTRIBUTING.md)
 - Fork the repository.
 - Create a new branch for your feature or bug fix.
 - Commit your changes and push the branch to your fork.
 - Open a pull request explaining your changes.
 
-Please ensure that your code follows the existing coding style and conventions.
+Please ensure that your code follows the existing coding style and does not violate the [Hypixel Rules](https://hypixel.net/rules)
 
+## Questions or Concerns?
+Great! We love your enthusiasm! \
+In 3-5 business days we will have a discord open and ready for all of our aspiring developers!  
+until then, feel free to open an issue [here!](https://github.com/SkyBlock-Central/SkyBlock-Core/issues)
 ## License
 
 SkyBlock-Core is licensed under the [Apache License 2.0](https://github.com/SkyBlock-Central/SkyBlock-Core/blob/main/LICENSE). See the `LICENSE` file for more information.
