@@ -28,8 +28,15 @@ public class SkyblockCore implements ClientModInitializer {
     public static final String ModID = "skyblockcore";
 
     private static boolean ON_SKYBLOCK = false;
-    public static boolean isOnSkyblock() { return ON_SKYBLOCK; }
-    public static String getLocation() { return LOCATION; }
+
+    public static boolean isOnSkyblock() {
+        return ON_SKYBLOCK;
+    }
+
+    public static String getLocation() {
+        return LOCATION;
+    }
+
     private static String LOCATION;
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
@@ -47,6 +54,10 @@ public class SkyblockCore implements ClientModInitializer {
             return ActionResult.PASS;
         });
         LocationChangedCallback.EVENT.register(((oldLocation, newLocation) -> {
+            // Simple Logging Statement for testing.
+            // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
+            //  why certain zones might be messing with their code.
+            LOGGER.info("[SkyblockCore] {Location Changed from: " + oldLocation + " to: " + newLocation + "}");
             LOCATION = newLocation;
             return ActionResult.PASS;
         }));

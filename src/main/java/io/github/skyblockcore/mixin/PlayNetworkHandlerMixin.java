@@ -15,6 +15,8 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
+import org.slf4j.Logger;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,27 +28,14 @@ import java.util.Set;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class PlayNetworkHandlerMixin {
-    @Shadow private ClientWorld world;
-    private static final Set<String> SKYBLOCK_TITLES = Sets.newHashSet("SKYBLOCK", "\u7A7A\u5C9B\u751F\u5B58", "\u7A7A\u5CF6\u751F\u5B58");
+    @Shadow
+    private ClientWorld world;
+    @Shadow
+    @Final
+    private static Logger LOGGER;
 
     @Inject(method = "onScoreboardObjectiveUpdate", at = @At("TAIL"))
     void onScoreboardDisplay(ScoreboardObjectiveUpdateS2CPacket packet, CallbackInfo ci) {
-        boolean onSkyblock = SkyblockCore.isOnSkyblock();
-        Scoreboard scoreboard = this.world.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getObjectiveForSlot(Scoreboard.SIDEBAR_DISPLAY_SLOT_ID);
-        if (objective == null) return;
-        String header = objective.getDisplayName().getString();
-        for (String TITLE : SKYBLOCK_TITLES) {
-            if (header.contains(TITLE)) {
-                if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
-                return;
-            }
-        }
-        if (onSkyblock) LeaveSkyblockCallback.EVENT.invoker().interact();
-    }
-
-    @Inject(method = "onScoreboardDisplay", at = @At("TAIL"))
-    void onScoreboardDisplay(ScoreboardDisplayS2CPacket packet, CallbackInfo ci) {
         if (!SkyblockCore.isOnSkyblock()) return;
 
         Scoreboard scoreboard = this.world.getScoreboard();
@@ -62,6 +51,42 @@ public class PlayNetworkHandlerMixin {
                 LocationChangedCallback.EVENT.invoker().interact(SkyblockCore.getLocation(), location);
                 break;
             }
+        }
+    }
+
+    private static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
+    private static final String HEALTH_SCOREBOARD = "health";
+
+    @Inject(method = "onScoreboardDisplay", at = @At("TAIL"))
+    void onScoreboardDisplay(ScoreboardDisplayS2CPacket packet, CallbackInfo ci) {
+        if (packet.getName() == null) return;
+        // Firstly, Ignoring "health" as this scoreboard is a part of the Skyblock Join Process,
+        // but can lead to false positives in other games.
+        // In the future, this may need to be added onto, if we receive more possible false positives if Hypixel
+        // adds more actively changed scoreboards.
+        if (packet.getName().contains(HEALTH_SCOREBOARD)) {
+            // Simple Logging Statement for testing.
+            // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
+            LOGGER.info("[SkyblockCore] {Health Scoreboard \"Ignored\"} " + packet.getName());
+            return;
+        }
+        // Now, that "health" is out to the way we check for "SBScoreboard" on join of the world
+        // However, this may also need to be added onto later if we receive more unique cases of Scoreboard names.
+        // If we receive "SBScoreboard" we say we "join" Skyblock.
+        // If we receive some other scoreboard name, we say we "quit" Skyblock.
+        boolean onSkyblock = SkyblockCore.isOnSkyblock();
+        if (packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
+            // Simple Logging Statement for testing.
+            // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
+            LOGGER.info("[SkyblockCore] {SKYBLOCK SB \"Joined SB\"} " + packet.getName());
+            if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
+        }
+
+        if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
+            // Simple Logging Statement for testing.
+            // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
+            LOGGER.info("[SkyblockCore] {Other Scoreboard, \"Quit SB\"} " + packet.getName());
+            if (onSkyblock) LeaveSkyblockCallback.EVENT.invoker().interact();
         }
     }
 }
