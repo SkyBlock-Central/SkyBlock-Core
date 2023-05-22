@@ -16,16 +16,10 @@
 
 package io.github.skyblockcore;
 
-import com.mojang.brigadier.CommandDispatcher;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
-
-
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
-import net.minecraft.client.network.ClientCommandSource;
+import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.util.ActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,12 +41,6 @@ public class SkyblockCore implements ClientModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
 
-    private static final String TITLE = "[SkyblockCore]";
-
-    public static boolean devModeEnabled() {
-        return true;
-    }
-
     @Override
     public void onInitializeClient() {
         // example of events, TODO; move to better class
@@ -69,10 +57,7 @@ public class SkyblockCore implements ClientModInitializer {
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
             //  why certain zones might be messing with their code.
-            boolean devModeEnabled = SkyblockCore.devModeEnabled();
-            if (devModeEnabled) {
-                LOGGER.info(TITLE + " SkyblockCore Has Detected A location Change! >" + " From: " + oldLocation + " To: " + newLocation);
-            }
+            LOGGER.info("[SkyblockCore] {Location Changed from: " + oldLocation + " to: " + newLocation + "}");
             LOCATION = newLocation;
             return ActionResult.PASS;
         }));
