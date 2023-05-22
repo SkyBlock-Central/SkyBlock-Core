@@ -106,14 +106,10 @@ public class SkyblockCore implements ClientModInitializer {
         LocationChangedCallback.EVENT.register(((oldLocation, newLocation) -> {
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
-            //  why certain zones might be messing with their code.
-<<<<<<< Updated upstream
-            boolean devModeEnabled = SkyblockCore.devModeEnabled();
-            if (devModeEnabled) {
-=======
+            //  why certain zones might be messing with their code
             ModConfig config = SkyblockCore.getConfig();
             if (config != null && config.isLocation()) {
->>>>>>> Stashed changes
+
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev Old Location] > " + oldLocation);
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev New Location] > " + newLocation);
             }
