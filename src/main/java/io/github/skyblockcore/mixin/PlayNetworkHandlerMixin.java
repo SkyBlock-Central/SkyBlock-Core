@@ -4,6 +4,7 @@ import io.github.skyblockcore.SkyblockCore;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
+import io.github.skyblockcore.event.ModConfig;
 import io.github.skyblockcore.util.TextUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.world.ClientWorld;
@@ -14,24 +15,25 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.Collection;
+import static io.github.skyblockcore.SkyblockCore.ModID;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class PlayNetworkHandlerMixin {
+
     @Shadow
     private ClientWorld world;
     @Shadow
     @Final
-    private static Logger LOGGER;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModID);
 
     @Inject(method = "onScoreboardObjectiveUpdate", at = @At("TAIL"))
     void onScoreboardDisplay(ScoreboardObjectiveUpdateS2CPacket packet, CallbackInfo ci) {
@@ -67,8 +69,9 @@ public class PlayNetworkHandlerMixin {
         if (packet.getName().contains(HEALTH_SCOREBOARD)) {
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
-            boolean devModeEnabled = SkyblockCore.devModeEnabled();
-            if (devModeEnabled) {
+
+            ModConfig config = SkyblockCore.getConfig();
+            if (config != null && config.isDev()) {
                 LOGGER.info(TITLE + " Detected Health Scoreboard, Safely ignored! [Dev Packet] > " + packet.getName());
             }
             return;
@@ -80,12 +83,12 @@ public class PlayNetworkHandlerMixin {
         boolean onSkyblock = SkyblockCore.isOnSkyblock();
         if (packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
 
-            boolean devModeEnabled = SkyblockCore.devModeEnabled();
-            if (devModeEnabled) {
-                LOGGER.info(TITLE + " Joined Skyblock [Dev Packet] > " + packet.getName());
-            }
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
+            ModConfig config = SkyblockCore.getConfig();
+            if (config != null && config.isDev()) {
+                LOGGER.info(TITLE + " Joined Skyblock [Dev Packet] > " + packet.getName());
+            }
             LOGGER.info(TITLE + " Joined Skyblock");
             if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
         }
@@ -93,8 +96,8 @@ public class PlayNetworkHandlerMixin {
         if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
-            boolean devModeEnabled = SkyblockCore.devModeEnabled();
-            if (devModeEnabled) {
+            ModConfig config = SkyblockCore.getConfig();
+            if (config != null && config.isDev()) {
                 LOGGER.info(TITLE + " Detected a Different Scoreboard ~ Quitting Skyblock... [Dev Packet] > " + packet.getName());
             }
             LOGGER.info(TITLE + " Leaving Skyblock...");
