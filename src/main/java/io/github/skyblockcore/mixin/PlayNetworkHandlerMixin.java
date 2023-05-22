@@ -14,6 +14,7 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,6 +55,7 @@ public class PlayNetworkHandlerMixin {
 
     private static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
     private static final String HEALTH_SCOREBOARD = "health";
+    private static final String TITLE = "[SkyblockCore]";
 
     @Inject(method = "onScoreboardDisplay", at = @At("TAIL"))
     void onScoreboardDisplay(ScoreboardDisplayS2CPacket packet, CallbackInfo ci) {
@@ -65,7 +67,10 @@ public class PlayNetworkHandlerMixin {
         if (packet.getName().contains(HEALTH_SCOREBOARD)) {
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
-            LOGGER.info("[SkyblockCore] {Health Scoreboard \"Ignored\"} " + packet.getName());
+            boolean devModeEnabled = SkyblockCore.devModeEnabled();
+            if (devModeEnabled) {
+                LOGGER.info(TITLE + " Detected Health Scoreboard, Safely ignored! [Dev Packet] > " + packet.getName());
+            }
             return;
         }
         // Now, that "health" is out to the way we check for "SBScoreboard" on join of the world
@@ -74,16 +79,25 @@ public class PlayNetworkHandlerMixin {
         // If we receive some other scoreboard name, we say we "quit" Skyblock.
         boolean onSkyblock = SkyblockCore.isOnSkyblock();
         if (packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
+
+            boolean devModeEnabled = SkyblockCore.devModeEnabled();
+            if (devModeEnabled) {
+                LOGGER.info(TITLE + " Joined Skyblock [Dev Packet] > " + packet.getName());
+            }
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
-            LOGGER.info("[SkyblockCore] {SKYBLOCK SB \"Joined SB\"} " + packet.getName());
+            LOGGER.info(TITLE + " Joined Skyblock");
             if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
         }
 
         if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
-            LOGGER.info("[SkyblockCore] {Other Scoreboard, \"Quit SB\"} " + packet.getName());
+            boolean devModeEnabled = SkyblockCore.devModeEnabled();
+            if (devModeEnabled) {
+                LOGGER.info(TITLE + " Detected a Different Scoreboard ~ Quitting Skyblock... [Dev Packet] > " + packet.getName());
+            }
+            LOGGER.info(TITLE + " Leaving Skyblock...");
             if (onSkyblock) LeaveSkyblockCallback.EVENT.invoker().interact();
         }
     }

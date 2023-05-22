@@ -41,6 +41,12 @@ public class SkyblockCore implements ClientModInitializer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
 
+    private static final String TITLE = "[SkyblockCore]";
+
+    public static boolean devModeEnabled() {
+        return true;
+    }
+
     @Override
     public void onInitializeClient() {
         // example of events, TODO; move to better class
