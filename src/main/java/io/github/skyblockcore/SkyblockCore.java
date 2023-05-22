@@ -63,7 +63,11 @@ public class SkyblockCore implements ClientModInitializer {
             // Simple Logging Statement for testing.
             // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
             //  why certain zones might be messing with their code.
-            LOGGER.info("[SkyblockCore] {Location Changed from: " + oldLocation + " to: " + newLocation + "}");
+            boolean devModeEnabled = SkyblockCore.devModeEnabled();
+            if (devModeEnabled) {
+                LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev Old Location] > " + oldLocation);
+                LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev New Location] > " + newLocation);
+            }
             LOCATION = newLocation;
             return ActionResult.PASS;
         }));
