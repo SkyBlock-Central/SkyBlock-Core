@@ -45,7 +45,7 @@ public class SkyblockCoreCommand {
 
     private static int location() {
         // TODO Implement config editing & changing of the variable in config.
-        LOGGER.info(TITLE + " This would of started/stopped showing developer location data.");
+        LOGGER.info(TITLE + " This would have started/stopped showing developer location data.");
         return Command.SINGLE_SUCCESS;
     }
 }
