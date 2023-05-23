@@ -87,7 +87,7 @@ public class SkyblockCore implements ClientModInitializer {
         config.setLocation(false); // this is used for location output (see line 111 - 112) this is used for debugging new locations.
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(config);
-        File configFile = new File(FabricLoader.getInstance().getConfigDir() + File.separator + "SkyblockCoreConfig.json");
+        File configFile = FabricLoader.getInstance().getConfigDir().resolve("SkyblockCoreConfig.json").toFile();
         try (FileWriter writer = new FileWriter(configFile)) {
             writer.write(json);
         } catch (IOException e) {

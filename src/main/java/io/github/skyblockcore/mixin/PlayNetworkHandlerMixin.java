@@ -14,9 +14,6 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.text.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collection;
 
-import static io.github.skyblockcore.SkyblockCore.ModID;
+import static io.github.skyblockcore.SkyblockCore.LOGGER;
 import static io.github.skyblockcore.SkyblockCore.getConfig;
 
 @Mixin(ClientPlayNetworkHandler.class)
@@ -33,9 +30,6 @@ public class PlayNetworkHandlerMixin {
 
     @Shadow
     private ClientWorld world;
-    @Shadow
-    @Final
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModID);
 
     @Inject(method = "onScoreboardObjectiveUpdate", at = @At("TAIL"))
     void onScoreboardDisplay(ScoreboardObjectiveUpdateS2CPacket packet, CallbackInfo ci) {
