@@ -64,7 +64,7 @@ public class SkyblockCore implements ClientModInitializer {
 
 
     public static void loadConfig() {
-        File configFile = new File(FabricLoader.getInstance().getConfigDir() + File.separator + "SkyblockCoreConfig.json");
+        File configFile = FabricLoader.getInstance().getConfigDir().resolve("SkyblockCoreConfig.json").toFile();
         if (configFile.exists()) {
             try (FileReader reader = new FileReader(configFile)) {
                 Gson gson = new GsonBuilder().create();
