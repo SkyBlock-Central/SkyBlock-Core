@@ -18,10 +18,7 @@ package io.github.skyblockcore;
 
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.skyblockcore.command.SkyblockCoreCommand;
-import io.github.skyblockcore.event.ConfigManager;
-import io.github.skyblockcore.event.JoinSkyblockCallback;
-import io.github.skyblockcore.event.LeaveSkyblockCallback;
-import io.github.skyblockcore.event.LocationChangedCallback;
+import io.github.skyblockcore.event.*;
 import io.github.skyblockcore.mixin.HandledScreenFocusedSlotAccessor;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -65,6 +62,10 @@ public class SkyblockCore implements ClientModInitializer {
     public void onInitializeClient() {
         // We Must load the config first. Otherwise, Events relying on the config such as Location do not work.
         loadConfig();
+        // Install log filter
+
+        ConsoleLogFilter.installFilter();
+
         ClientCommandRegistrationCallback.EVENT.register(SkyblockCore::registerCommands);
         //ModConfig config = SkyblockCore.getConfig();
         // example of events, TODO; move to a better class
