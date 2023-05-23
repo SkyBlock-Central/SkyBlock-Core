@@ -31,7 +31,7 @@ public class PlayNetworkHandlerMixin {
         TeamS2CPacket.SerializableTeam team = packet.getTeam().get();
 
         // Technically there is a player name in here, but it's not useful to us - it's just a colour code.
-        String scoreboardLine = (team.getPrefix().getString() + team.getSuffix().getString()).strip() ;
+        String scoreboardLine = (team.getPrefix().getString() + team.getSuffix().getString()).strip();
         if (scoreboardLine.length() > 0 && scoreboardLine.charAt(0) == '\u23E3') {
             // This is a location line
             String location = scoreboardLine.split("\u23E3 ")[1];
@@ -44,10 +44,9 @@ public class PlayNetworkHandlerMixin {
     @Inject(method = "onScoreboardDisplay", at = @At("TAIL"))
     void onScoreboardDisplay(ScoreboardDisplayS2CPacket packet, CallbackInfo ci) {
         if (packet.getName() == null) return;
-        // Firstly, Ignoring "health" as this scoreboard is a part of the Skyblock Join Process,
-        // but can lead to false positives in other games.
-        // In the future, this may need to be added onto, if we receive more possible false positives if Hypixel
-        // adds more actively changed scoreboards.
+        // "health" is sent along with the first "SBScoreboard", we ignore health, as it can lead to false positives.
+        // This may need to have more names added on in time, if hypixel adds more packets like this that have uses
+        // in other games.
         if (packet.getName().contains(HEALTH_SCOREBOARD)) {
             // Simple Logging Statement for developers to easily debug.
             if (getConfig() != null && getConfig().isDev()) {
@@ -55,20 +54,9 @@ public class PlayNetworkHandlerMixin {
             }
             return;
         }
-        // Now, that "health" is out to the way we check for "SBScoreboard" on join of the world
-        // However, this may also need to be added onto later if we receive more unique cases of Scoreboard names.
-        // If we receive "SBScoreboard" we say we "join" Skyblock.
-        // If we receive some other scoreboard name, we say we "quit" Skyblock.
         boolean onSkyblock = SkyblockCore.isOnSkyblock();
-        if (packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
-            // Simple Logging Statement for developers to easily debug.
-            if (getConfig() != null && getConfig().isDev()) {
-                LOGGER.info(TITLE + " Joined Skyblock [Dev Packet] > " + packet.getName());
-            }
-            LOGGER.info(TITLE + " Joined Skyblock");
-            if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
-        }
-
+        // If we receive a packet other than "health" or "SBScoreboard" we say the user has "left" skyblock.
+        // This may need to have more names added on in time if skyblock ever removes/changes "SBScoreboard"
         if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
             // Simple Logging Statement for developers to easily debug.
             if (getConfig() != null && getConfig().isDev()) {
@@ -76,6 +64,15 @@ public class PlayNetworkHandlerMixin {
             }
             LOGGER.info(TITLE + " Leaving Skyblock...");
             if (onSkyblock) LeaveSkyblockCallback.EVENT.invoker().interact();
+            return;
         }
+        // Since we've eliminated all other packets, we are free to assume the user has joined Skyblock.
+        // Simple Logging Statement for developers to easily debug.
+        if (getConfig() != null && getConfig().isDev()) {
+            LOGGER.info(TITLE + " Joined Skyblock [Dev Packet] > " + packet.getName());
+        }
+        LOGGER.info(TITLE + " Joined Skyblock");
+        if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
+
     }
 }
