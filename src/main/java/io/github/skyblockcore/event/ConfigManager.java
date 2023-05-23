@@ -34,10 +34,16 @@ public class ConfigManager {
             LOGGER.info(TITLE + " Config successfully created! Welcome to SkyblockCore, a Skyblock mod designed for modern Minecraft.");
         }
     }
-
+/*
+* Config Guide ~~ Please add to this if you plan on adding config values!
+* setDev: False = do not show // True = show
+* setUnknownPlayer: True = hide spam // False = show spam
+* setLocation: False = do not show // True = show
+*/
     public static void createConfig() {
         config = new ModConfig(); // Below toggles will only change every time you wipe a config!
         config.setDev(false); // This will set all development features and logs to "TRUE". this is used for debugging errors with leaving/joining skyblock.
+        config.setUnknownPlayer(true); // Don't use unless you want random UUID strings its annoying and I hated it. so now its gone!
         config.setLocation(false); // this is used for location output (see SkyblockCore file > location stuff) this is used for debugging new locations.
         saveConfig();
     }

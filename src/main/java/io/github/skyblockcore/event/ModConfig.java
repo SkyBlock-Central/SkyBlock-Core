@@ -2,19 +2,25 @@ package io.github.skyblockcore.event;
 
 public class ModConfig {
     private boolean dev;
-
+    private boolean unknownPlayer;
     private boolean location;
 
     public boolean isDev() {
         return dev;
     }
-
+    public boolean isUnknownPlayer() {
+        return unknownPlayer;
+    }
     public boolean isLocation() {
         return location;
     }
 
+
     public void setDev(boolean dev) {
         this.dev = dev;
+    }
+    public void setUnknownPlayer(boolean unknownPlayer) {
+        this.unknownPlayer = unknownPlayer;
     }
     public void setLocation(boolean location) {
         this.location = location;
