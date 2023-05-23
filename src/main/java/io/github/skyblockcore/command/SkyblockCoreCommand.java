@@ -39,7 +39,7 @@ public class SkyblockCoreCommand {
 
     private static int dev() {
         // TODO Implement config editing & changing of the variable in config.
-        LOGGER.info(TITLE + " This would of started/stopped showing developer data.");
+        LOGGER.info(TITLE + " This would have started/stopped showing developer data.");
         return Command.SINGLE_SUCCESS;
     }
 
