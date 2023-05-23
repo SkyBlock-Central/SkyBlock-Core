@@ -31,6 +31,7 @@ import io.github.skyblockcore.event.ModConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.util.ActionResult;
 import org.slf4j.Logger;
@@ -63,8 +64,7 @@ public class SkyblockCore implements ClientModInitializer {
 
 
     public static void loadConfig() {
-        File configFile = new File(System.getProperty("user.dir") + File.separator + "config" + File.separator + "SkyblockCoreConfig.json");
-
+        File configFile = new File(FabricLoader.getInstance().getConfigDir() + File.separator + "SkyblockCoreConfig.json");
         if (configFile.exists()) {
             try (FileReader reader = new FileReader(configFile)) {
                 Gson gson = new GsonBuilder().create();
@@ -87,7 +87,7 @@ public class SkyblockCore implements ClientModInitializer {
         config.setLocation(false); // this is used for location output (see line 111 - 112) this is used for debugging new locations.
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String json = gson.toJson(config);
-        File configFile = new File(System.getProperty("user.dir") + File.separator + "config" + File.separator + "SkyblockCoreConfig.json");
+        File configFile = new File(FabricLoader.getInstance().getConfigDir() + File.separator + "SkyblockCoreConfig.json");
         try (FileWriter writer = new FileWriter(configFile)) {
             writer.write(json);
         } catch (IOException e) {
