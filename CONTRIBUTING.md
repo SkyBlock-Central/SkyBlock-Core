@@ -32,3 +32,23 @@ Use [DevAuth](https://github.com/DJtheRedstoner/DevAuth). You do **not** need to
 ### Hot Reloading
 
 Hot reloading is possible, to do that, you can run the `Minecraft Client` task with the IntelliJ debugger. Though hot-reloading can sometimes cause issues, so restarting will sometime be required.
+
+### Requirements For Pull Requests To Be Merged
+- Every pull request requires at least 2 approvals before it is able to be merged.
+- Only **contributors** (people added as a contributor - would previously have been able to merge commits) are able to approve pull requests.
+- If you push to **someone else's** fork after reviewing their PR, someone else must review **your** changes before the PR is able to be merged.
+- All conversations must be resolved before the PR is mergeable. These can be resolved by any contributor. Conversations are explicitly comments **on code, not in the main pull request thread**.
+- If a **new commit** is added to a pull request, all approvals are dismissed, and **new approvals are needed** before it can be merged (this prevents unreviewed code being added after approvals).
+
+### Implications
+- Maintainer (or contributor) does **not** allow anyone to write directly to the codebase.
+- Any code change will have been seen (and approved) by at least 3 pairs of eyeballs (including the original writer) before it is able to be merged.
+- Contributor role is able to be given freely to (somewhat competent) developers without worrying about potential ramifications - reviews are still required, contributor just allows them to approve changes and merge once 2+ reviews have been given to the final PR.
+
+----------
+
+These are not advisories - GitHub will not allow you to merge a pull request without these being met. If you're confused about why you can't merge a PR, GitHub gives you a nice step-by-step breakdown of what you need to do at the bottom of the PR's page.
+
+---
+
+© 2023 SkyBlock-Central. Subject to the Apache License 2.0.
