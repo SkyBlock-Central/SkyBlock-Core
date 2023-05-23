@@ -4,23 +4,13 @@ import io.github.skyblockcore.SkyblockCore;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
-import io.github.skyblockcore.util.TextUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.packet.s2c.play.ScoreboardDisplayS2CPacket;
-import net.minecraft.network.packet.s2c.play.ScoreboardObjectiveUpdateS2CPacket;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.ScoreboardObjective;
-import net.minecraft.scoreboard.ScoreboardPlayerScore;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.text.Text;
+import net.minecraft.network.packet.s2c.play.TeamS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Collection;
 
 import static io.github.skyblockcore.SkyblockCore.LOGGER;
 import static io.github.skyblockcore.SkyblockCore.getConfig;
@@ -28,26 +18,26 @@ import static io.github.skyblockcore.SkyblockCore.getConfig;
 @Mixin(ClientPlayNetworkHandler.class)
 public class PlayNetworkHandlerMixin {
 
-    @Shadow
-    private ClientWorld world;
 
-    @Inject(method = "onScoreboardObjectiveUpdate", at = @At("TAIL"))
-    void onScoreboardDisplay(ScoreboardObjectiveUpdateS2CPacket packet, CallbackInfo ci) {
+    @Inject(method = "onTeam", at = @At("TAIL"))
+    void onTeam(TeamS2CPacket packet, CallbackInfo ci) {
+        // Check that the player is actually on Skyblock before processing team update
         if (!SkyblockCore.isOnSkyblock()) return;
 
-        Scoreboard scoreboard = this.world.getScoreboard();
-        ScoreboardObjective objective = scoreboard.getNullableObjective(packet.getName());
-        if (objective == null) return;
+        // SkyBlock represents lines on the scoreboard as teams
+        if (packet.getTeam().isEmpty()) {
+            // Team is empty, has no data for us to use.
+            return;
+        }
+        TeamS2CPacket.SerializableTeam team = packet.getTeam().get();
 
-        Collection<ScoreboardPlayerScore> scores = scoreboard.getAllPlayerScores(objective);
-        for (ScoreboardPlayerScore score : scores) {
-            String line = Team.decorateName(scoreboard.getPlayerTeam(score.getPlayerName()), Text.literal(score.getPlayerName())).getString();
-            if (line.contains("\u23E3")) {
-                String location = TextUtils.stripColorCodes(line.split("\u23E3 ")[1]);
-                if (location.equals(SkyblockCore.getLocation())) break;
-                LocationChangedCallback.EVENT.invoker().interact(SkyblockCore.getLocation(), location);
-                break;
-            }
+        // Technically there is a player name in here, but it's not useful to us - it's just a colour code.
+        String scoreboardLine = (team.getPrefix().getString() + team.getSuffix().getString()).strip() ;
+        if (scoreboardLine.length() > 0 && scoreboardLine.charAt(0) == '\u23E3') {
+            // This is a location line
+            String location = scoreboardLine.split("\u23E3 ")[1];
+            if (location.equals(SkyblockCore.getLocation())) return; // Location didn't change
+            LocationChangedCallback.EVENT.invoker().interact(SkyblockCore.getLocation(), location);
         }
     }
 
