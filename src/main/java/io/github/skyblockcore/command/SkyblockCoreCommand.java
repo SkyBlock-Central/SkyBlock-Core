@@ -33,7 +33,7 @@ public class SkyblockCoreCommand {
     private static int nbt() {
         // TODO Implement NBT Handling Logic here
         //  This will be similar to "/sba dev" or "/skytils dev nbt".
-        LOGGER.info(TITLE + " This would of started/stopped the NBT data.");
+        LOGGER.info(TITLE + " This would have started/stopped the NBT data.");
         return Command.SINGLE_SUCCESS;
     }
 
