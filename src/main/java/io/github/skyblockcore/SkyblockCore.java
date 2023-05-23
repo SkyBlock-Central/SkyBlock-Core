@@ -42,9 +42,10 @@ import java.io.FileWriter;
 
 public class SkyblockCore implements ClientModInitializer {
 
-
     public static final String ModID = "skyblockcore";
-
+    public static final String TITLE = "[SkyblockCore]";
+    public static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
+    public static final String HEALTH_SCOREBOARD = "health";
     private static boolean ON_SKYBLOCK = false;
 
     public static boolean isOnSkyblock() {
@@ -60,7 +61,7 @@ public class SkyblockCore implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
 
     private static ModConfig config;
-    private static final String TITLE = "[SkyblockCore]";
+
 
 
     public static void loadConfig() {

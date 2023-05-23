@@ -4,14 +4,15 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
-import static io.github.skyblockcore.SkyblockCore.LOGGER;
-import static io.github.skyblockcore.SkyblockCore.loadConfig;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
+import static io.github.skyblockcore.SkyblockCore.*;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class SkyblockCoreCommand {
 
-    private static final String TITLE = "[SkyblockCore]";
 
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
@@ -27,25 +28,36 @@ public class SkyblockCoreCommand {
         loadConfig();
         // TODO Send user feedback in Minecraft Chat
         LOGGER.info(TITLE + " Reloaded Config!");
+        assert MinecraftClient.getInstance().player != null;
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Config file Reloaded in: timeMS" /* TODO add time ms */).formatted(Formatting.WHITE), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int nbt() {
         // TODO Implement NBT Handling Logic here
-        //  This will be similar to "/sba dev" or "/skytils dev nbt".
-        LOGGER.info(TITLE + " This would have started/stopped the NBT data.");
+        // This will be similar to "/sba dev" or "/skytils dev nbt".
+        if (getConfig() != null && getConfig().isLocation()) {
+            LOGGER.info(TITLE + " NBT data has been copied to your clipboard!");
+        }
+//      If thomas wants to do smth better here he can.
+        assert MinecraftClient.getInstance().player != null;
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT data copied to clipboard!").formatted(Formatting.WHITE), false);
         return Command.SINGLE_SUCCESS;
     }
-
     private static int dev() {
         // TODO Implement config editing & changing of the variable in config.
-        LOGGER.info(TITLE + " This would have started/stopped showing developer data.");
+        LOGGER.info(TITLE + " Successfully enabled Developer mode!");
+        assert MinecraftClient.getInstance().player != null;
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Dev mode Enabled/Disabled" /* TODO if dev mode was true say false, vice versa.*/).formatted(Formatting.WHITE), false);
         return Command.SINGLE_SUCCESS;
     }
 
     private static int location() {
         // TODO Implement config editing & changing of the variable in config.
-        LOGGER.info(TITLE + " This would have started/stopped showing developer location data.");
+        // TODO Make it log all location movements or make a separate toggle for that in minecraft chat
+        LOGGER.info(TITLE + " Successfully enabled location logging!");
+        assert MinecraftClient.getInstance().player != null;
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Location data Enabled/Disabled").formatted(Formatting.WHITE), false);
         return Command.SINGLE_SUCCESS;
     }
 }

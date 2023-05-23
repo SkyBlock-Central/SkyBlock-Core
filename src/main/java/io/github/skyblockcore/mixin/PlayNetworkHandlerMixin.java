@@ -12,8 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.skyblockcore.SkyblockCore.LOGGER;
-import static io.github.skyblockcore.SkyblockCore.getConfig;
+import static io.github.skyblockcore.SkyblockCore.*;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class PlayNetworkHandlerMixin {
@@ -41,9 +40,6 @@ public class PlayNetworkHandlerMixin {
         }
     }
 
-    private static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
-    private static final String HEALTH_SCOREBOARD = "health";
-    private static final String TITLE = "[SkyblockCore]";
 
     @Inject(method = "onScoreboardDisplay", at = @At("TAIL"))
     void onScoreboardDisplay(ScoreboardDisplayS2CPacket packet, CallbackInfo ci) {
