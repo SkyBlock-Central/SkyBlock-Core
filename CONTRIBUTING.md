@@ -51,4 +51,4 @@ These are not advisories - GitHub will not allow you to merge a pull request wit
 
 ---
 
-© 2023 SkyBlock-Central. All rights reserved.
+© 2023 SkyBlock-Central. Subject to the Apache License 2.0.
