@@ -24,10 +24,7 @@ import java.io.IOException;
 
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.skyblockcore.command.SkyblockCoreCommand;
-import io.github.skyblockcore.event.JoinSkyblockCallback;
-import io.github.skyblockcore.event.LeaveSkyblockCallback;
-import io.github.skyblockcore.event.LocationChangedCallback;
-import io.github.skyblockcore.event.ModConfig;
+import io.github.skyblockcore.event.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -40,6 +37,8 @@ import com.google.gson.Gson;
 
 import java.io.FileWriter;
 
+import static io.github.skyblockcore.event.ConfigManager.loadConfig;
+
 public class SkyblockCore implements ClientModInitializer {
 
     public static final String ModID = "skyblockcore";
@@ -47,58 +46,16 @@ public class SkyblockCore implements ClientModInitializer {
     public static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
     public static final String HEALTH_SCOREBOARD = "health";
     private static boolean ON_SKYBLOCK = false;
-
     public static boolean isOnSkyblock() {
         return ON_SKYBLOCK;
     }
-
     public static String getLocation() {
         return LOCATION;
     }
-
     private static String LOCATION;
-
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
 
-    private static ModConfig config;
 
-
-
-    public static void loadConfig() {
-        File configFile = FabricLoader.getInstance().getConfigDir().resolve("SkyblockCoreConfig.json").toFile();
-        if (configFile.exists()) {
-            try (FileReader reader = new FileReader(configFile)) {
-                Gson gson = new GsonBuilder().create();
-                config = gson.fromJson(reader, ModConfig.class);
-                if (config != null && config.isDev()) {
-                    LOGGER.info(TITLE + " Config file loaded. [Dev]");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            createConfig();
-            LOGGER.info(TITLE + " Config successfully created! Welcome to SkyblockCore, a Skyblock mod designed for modern Minecraft.");
-        }
-    }
-
-    public static void createConfig() {
-        config = new ModConfig(); // Below toggles will only change every time you wipe a config!
-        config.setDev(false); // This will set all development features and logs to "TRUE". this is used for debugging errors with leaving/joining skyblock.
-        config.setLocation(false); // this is used for location output (see line 111 - 112) this is used for debugging new locations.
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String json = gson.toJson(config);
-        File configFile = FabricLoader.getInstance().getConfigDir().resolve("SkyblockCoreConfig.json").toFile();
-        try (FileWriter writer = new FileWriter(configFile)) {
-            writer.write(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static ModConfig getConfig() {
-        return config; // see io.github.skyblockcore/event/ModConfig
-    }
 
     @Override
     public void onInitializeClient() {
@@ -118,10 +75,11 @@ public class SkyblockCore implements ClientModInitializer {
         });
         LocationChangedCallback.EVENT.register(((oldLocation, newLocation) -> {
             // Simple Logging Statement for mod developers to debug locations affecting their code.
-            if (getConfig() != null && getConfig().isLocation()) {
+            if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isLocation()) {
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev Old Location] > " + oldLocation);
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev New Location] > " + newLocation);
             }
+
             LOCATION = newLocation;
             return ActionResult.PASS;
         }));

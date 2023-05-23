@@ -1,6 +1,7 @@
 package io.github.skyblockcore.mixin;
 
 import io.github.skyblockcore.SkyblockCore;
+import io.github.skyblockcore.event.ConfigManager;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
@@ -49,7 +50,7 @@ public class PlayNetworkHandlerMixin {
         // in other games.
         if (packet.getName().contains(HEALTH_SCOREBOARD)) {
             // Simple Logging Statement for developers to easily debug.
-            if (getConfig() != null && getConfig().isDev()) {
+            if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
                 LOGGER.info(TITLE + " Detected Health Scoreboard, Safely ignored! [Dev Packet] > " + packet.getName());
             }
             return;
@@ -59,7 +60,7 @@ public class PlayNetworkHandlerMixin {
         // This may need to have more names added on in time if skyblock ever removes/changes "SBScoreboard"
         if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
             // Simple Logging Statement for developers to easily debug.
-            if (getConfig() != null && getConfig().isDev()) {
+            if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
                 LOGGER.info(TITLE + " Detected a Different Scoreboard ~ Quitting Skyblock... [Dev Packet] > " + packet.getName());
             }
             LOGGER.info(TITLE + " Leaving Skyblock...");
@@ -68,7 +69,7 @@ public class PlayNetworkHandlerMixin {
         }
         // Since we've eliminated all other packets, we are free to assume the user has joined Skyblock.
         // Simple Logging Statement for developers to easily debug.
-        if (getConfig() != null && getConfig().isDev()) {
+        if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
             LOGGER.info(TITLE + " Joined Skyblock [Dev Packet] > " + packet.getName());
         }
         LOGGER.info(TITLE + " Joined Skyblock");
