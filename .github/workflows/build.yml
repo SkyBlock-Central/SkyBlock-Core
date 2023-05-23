@@ -4,7 +4,22 @@
 # against bad commits.
 
 name: build
-on: [pull_request, push]
+on:
+  pull-request:
+    paths-ignore:
+      - ".gitignore"
+      - "LICENSE"
+      - "README.md"
+      - "CONTRIBUTING.md"
+      - ".idea/copyright/*"
+  push:
+    paths-ignore:
+      - ".gitignore"
+      - "LICENSE"
+      - "README.md"
+      - "CONTRIBUTING.md"
+      - ".idea/copyright/*"
+  workflow-dispatch:
 
 jobs:
   build:
