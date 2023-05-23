@@ -17,18 +17,26 @@
 package io.github.skyblockcore;
 
 import com.google.gson.GsonBuilder;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import com.mojang.brigadier.CommandDispatcher;
+import io.github.skyblockcore.command.SkyblockCoreCommand;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
 import io.github.skyblockcore.event.ModConfig;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.util.ActionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
+
 import java.io.FileWriter;
 
 public class SkyblockCore implements ClientModInitializer {
@@ -54,7 +62,7 @@ public class SkyblockCore implements ClientModInitializer {
     private static final String TITLE = "[SkyblockCore]";
 
 
-    public void loadConfig() {
+    public static void loadConfig() {
         File configFile = new File(System.getProperty("user.dir") + File.separator + "config" + File.separator + "SkyblockCoreConfig.json");
 
         if (configFile.exists()) {
@@ -62,7 +70,7 @@ public class SkyblockCore implements ClientModInitializer {
                 Gson gson = new GsonBuilder().create();
                 config = gson.fromJson(reader, ModConfig.class);
                 if (config != null && config.isDev()) {
-                    LOGGER.info(TITLE + "Config file loaded. [Dev]");
+                    LOGGER.info(TITLE + " Config file loaded. [Dev]");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -73,7 +81,7 @@ public class SkyblockCore implements ClientModInitializer {
         }
     }
 
-    public void createConfig() {
+    public static void createConfig() {
         config = new ModConfig(); // Below toggles will only change every time you wipe a config!
         config.setDev(false); // This will set all development features and logs to "TRUE". this is used for debugging errors with leaving/joining skyblock.
         config.setLocation(false); // this is used for location output (see line 111 - 112) this is used for debugging new locations.
@@ -93,6 +101,10 @@ public class SkyblockCore implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // We Must load the config first. Otherwise, Events relying on the config such as Location do not work.
+        loadConfig();
+        ClientCommandRegistrationCallback.EVENT.register(SkyblockCore::registerCommands);
+        //ModConfig config = SkyblockCore.getConfig();
         // example of events, TODO; move to a better class
         JoinSkyblockCallback.EVENT.register(() -> {
             ON_SKYBLOCK = true;
@@ -104,19 +116,18 @@ public class SkyblockCore implements ClientModInitializer {
             return ActionResult.PASS;
         });
         LocationChangedCallback.EVENT.register(((oldLocation, newLocation) -> {
-            // Simple Logging Statement for testing.
-            // TODO Eventually these/something similar should be a separate toggle for developers to easily debug
-            //  why certain zones might be messing with their code
-            ModConfig config = SkyblockCore.getConfig();
-            if (config != null && config.isLocation()) {
-
+            // Simple Logging Statement for mod developers to debug locations affecting their code.
+            if (getConfig() != null && getConfig().isLocation()) {
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev Old Location] > " + oldLocation);
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev New Location] > " + newLocation);
             }
             LOCATION = newLocation;
             return ActionResult.PASS;
         }));
-        // If there is a better way to do this please let me know -axle
-        loadConfig();
+
+    }
+
+    public static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
+        SkyblockCoreCommand.register(dispatcher);
     }
 }
