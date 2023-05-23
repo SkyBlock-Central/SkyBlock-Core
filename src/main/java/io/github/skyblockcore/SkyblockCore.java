@@ -102,8 +102,7 @@ public class SkyblockCore implements ClientModInitializer {
                         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
                             LOGGER.info(TITLE + " [Dev NBT] > " + itemNBT);
                         }
-                        // Unable to copy to clipboard, just crashes me every single time lol.
-                        // TODO Enable/make clipboard copying.
+                        MinecraftClient.getInstance().keyboard.setClipboard(itemNBT);
                     }
                 }
             }
