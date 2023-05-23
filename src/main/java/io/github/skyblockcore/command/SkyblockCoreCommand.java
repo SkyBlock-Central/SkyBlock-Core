@@ -39,7 +39,6 @@ public class SkyblockCoreCommand {
         if (getConfig() != null && getConfig().isLocation()) {
             LOGGER.info(TITLE + " NBT data has been copied to your clipboard!");
         }
-//      If thomas wants to do smth better here he can.
         if (MinecraftClient.getInstance().player == null) return 0;
         MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT data copied to clipboard!").formatted(Formatting.WHITE), false);
         return Command.SINGLE_SUCCESS;
