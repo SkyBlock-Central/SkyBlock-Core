@@ -43,4 +43,4 @@ SkyBlock-Core is licensed under the [Apache License 2.0](https://github.com/SkyB
 
 ---
 
-© 2023 SkyBlock-Central. All rights reserved.
+© 2023 SkyBlock-Central. Subject to the Apache License 2.0.
