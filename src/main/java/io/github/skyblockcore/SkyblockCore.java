@@ -16,27 +16,29 @@
 
 package io.github.skyblockcore;
 
-import com.google.gson.GsonBuilder;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.skyblockcore.command.SkyblockCoreCommand;
-import io.github.skyblockcore.event.*;
+import io.github.skyblockcore.event.ConfigManager;
+import io.github.skyblockcore.event.JoinSkyblockCallback;
+import io.github.skyblockcore.event.LeaveSkyblockCallback;
+import io.github.skyblockcore.event.LocationChangedCallback;
+import io.github.skyblockcore.mixin.HandledScreenFocusedSlotAccessor;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.ActionResult;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.gson.Gson;
 
-import java.io.FileWriter;
-
+import static io.github.skyblockcore.command.SkyblockCoreCommand.NBTCOPYING;
 import static io.github.skyblockcore.event.ConfigManager.loadConfig;
 
 public class SkyblockCore implements ClientModInitializer {
@@ -46,15 +48,17 @@ public class SkyblockCore implements ClientModInitializer {
     public static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
     public static final String HEALTH_SCOREBOARD = "health";
     private static boolean ON_SKYBLOCK = false;
+
     public static boolean isOnSkyblock() {
         return ON_SKYBLOCK;
     }
+
     public static String getLocation() {
         return LOCATION;
     }
+
     private static String LOCATION;
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
-
 
 
     @Override
@@ -79,10 +83,31 @@ public class SkyblockCore implements ClientModInitializer {
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev Old Location] > " + oldLocation);
                 LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev New Location] > " + newLocation);
             }
-
             LOCATION = newLocation;
             return ActionResult.PASS;
         }));
+        // Source from https://github.com/apace100/show-me-what-you-got for implementation of the mixin.
+        ClientTickEvents.START_CLIENT_TICK.register(tick -> {
+            if (!NBTCOPYING) return;
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client.player != null && client.currentScreen instanceof HandledScreen) {
+                HandledScreenFocusedSlotAccessor focusedSlotAccessor = (HandledScreenFocusedSlotAccessor) client.currentScreen;
+                Slot focusedSlot = focusedSlotAccessor.getFocusedSlot();
+                boolean isCtrlPressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_CONTROL);
+                if (isCtrlPressed) {
+                    if (client.player.currentScreenHandler.getCursorStack().isEmpty() && focusedSlot != null && focusedSlot.hasStack()) {
+                        ItemStack itemToCopyNBT = focusedSlot.getStack();
+                        if (itemToCopyNBT.getNbt() == null) return;
+                        String itemNBT = "minecraft:" + itemToCopyNBT.getItem().getName().getString() + " " + itemToCopyNBT.getNbt();
+                        if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
+                            LOGGER.info(TITLE + " [Dev NBT] > " + itemNBT);
+                        }
+                        // Unable to copy to clipboard, just crashes me every single time lol.
+                        // TODO Enable/make clipboard copying.
+                    }
+                }
+            }
+        });
 
     }
 

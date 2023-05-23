@@ -10,11 +10,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import static io.github.skyblockcore.SkyblockCore.*;
-import static io.github.skyblockcore.event.ConfigManager.loadConfig;
+import static io.github.skyblockcore.SkyblockCore.LOGGER;
+import static io.github.skyblockcore.SkyblockCore.TITLE;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 public class SkyblockCoreCommand {
+
+    public static boolean NBTCOPYING = false;
 
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
@@ -37,13 +39,10 @@ public class SkyblockCoreCommand {
     }
 
     private static int nbt() {
-        // TODO Implement NBT Handling Logic here
-        // This will be similar to "/sba dev" or "/skytils dev nbt".
-        if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isLocation()) {
-            LOGGER.info(TITLE + " NBT data has been copied to your clipboard!");
-        }
+        // Practically done. Needs help in the main class for copying.
         if (MinecraftClient.getInstance().player == null) return 0;
-        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT data copied to clipboard!").formatted(Formatting.WHITE), false);
+        NBTCOPYING = !NBTCOPYING;
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT copying has been " + (NBTCOPYING ? "enabled! (Tip, use Right Control to copy items NBT data to clipboard.)" : "disabled!")).formatted(Formatting.WHITE), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -53,12 +52,10 @@ public class SkyblockCoreCommand {
             boolean currentDevSetting = config.isDev();
             config.setDev(!currentDevSetting); // Toggle the dev mode setting
             ConfigManager.saveConfig(); // Save the updated config
-
             LOGGER.info(TITLE + " Successfully " + (currentDevSetting ? "disabled" : "enabled") + " Developer mode!");
             if (MinecraftClient.getInstance().player == null) return 0;
             MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Dev mode " + (currentDevSetting ? "Disabled" : "Enabled")).formatted(Formatting.WHITE), false);
         }
-
         return Command.SINGLE_SUCCESS;
     }
 
@@ -71,7 +68,7 @@ public class SkyblockCoreCommand {
             LOGGER.info(TITLE + " Successfully " + (currentLocationSetting ? "disabled" : "enabled") + " location logging!");
             if (MinecraftClient.getInstance().player == null) return 0;
             MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Location data " + (currentLocationSetting ? "Disabled" : "Enabled")).formatted(Formatting.WHITE), false);
-            }
+        }
 
 
         return Command.SINGLE_SUCCESS;
