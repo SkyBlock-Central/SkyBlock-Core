@@ -7,7 +7,6 @@
     "ClientConnectionMixin"
   ],
   "client": [
-    "ExampleMixin",
     "PlayNetworkHandlerMixin"
   ],
   "injectors": {
