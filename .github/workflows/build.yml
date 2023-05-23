@@ -9,16 +9,14 @@ on:
     paths-ignore:
       - ".gitignore"
       - "LICENSE"
-      - "README.md"
-      - "CONTRIBUTING.md"
-      - ".idea/copyright/*"
+      - "**.md"
+      - ".idea/copyright/**"
   push:
     paths-ignore:
       - ".gitignore"
       - "LICENSE"
-      - "README.md"
-      - "CONTRIBUTING.md"
-      - ".idea/copyright/*"
+      - "**.md"
+      - ".idea/copyright/**"
   workflow_dispatch:
 
 jobs:
