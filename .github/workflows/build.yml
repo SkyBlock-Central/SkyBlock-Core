@@ -19,7 +19,7 @@ on:
       - "README.md"
       - "CONTRIBUTING.md"
       - ".idea/copyright/*"
-  workflow-dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
