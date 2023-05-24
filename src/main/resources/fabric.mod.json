@@ -28,6 +28,13 @@
     "skyblockcore.mixins.json"
   ],
 
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    },
+    "update_checker": false
+  },
+
   "depends": {
     "fabricloader": ">=0.14.19",
     "fabric-api": "*",
