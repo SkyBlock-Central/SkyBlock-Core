@@ -34,7 +34,7 @@ public class HandledScreenMixin {
         if (focused == null || !focused.hasStack() || !handler.getCursorStack().isEmpty()) return;
         ItemStack itemToCopyNBT = focusedSlot.getStack();
         if (itemToCopyNBT.getNbt() == null) return;
-        String itemNBT = "minecraft:" + itemToCopyNBT.getItem().getName().getString() + " " + itemToCopyNBT.getNbt();
+        String itemNBT = "minecraft:" + itemToCopyNBT.getItem().toString() + " " + itemToCopyNBT.getNbt();
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) SkyblockCore.LOGGER.info(TITLE + " [Dev NBT] > " + itemNBT);
         MinecraftClient.getInstance().keyboard.setClipboard(itemNBT);
     }
