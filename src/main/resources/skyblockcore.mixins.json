@@ -7,7 +7,7 @@
     "ClientConnectionMixin"
   ],
   "client": [
-    "ExampleMixin",
+    "HandledScreenFocusedSlotAccessor",
     "PlayNetworkHandlerMixin"
   ],
   "injectors": {

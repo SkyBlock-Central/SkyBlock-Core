@@ -4,12 +4,15 @@
   "version": "@version@",
 
   "name": "SkyBlock Core",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "SkyBlock Core is a centralized mod for SkyBlock settings, menus, localization, events, and more.",
   "authors": [
     "Skyblock Mod Developers"
   ],
   "contributors": [
-    "Ascynx"
+    "Ascynx",
+    "WiViW",
+    "Axle",
+    "TGWaffles"
   ],
   "contact": {
     "sources": "https://github.com/SkyBlock-Central/SkyBlock-Core"
