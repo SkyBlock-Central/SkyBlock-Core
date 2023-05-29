@@ -18,7 +18,7 @@
     "sources": "https://github.com/SkyBlock-Central/SkyBlock-Core"
   },
 
-  "license": "CC0-1.0",
+  "license": "Apache-2.0",
   "icon": "assets/skyblockcore/icon.png",
 
   "environment": "client",
@@ -30,6 +30,13 @@
   "mixins": [
     "skyblockcore.mixins.json"
   ],
+
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    },
+    "update_checker": false
+  },
 
   "depends": {
     "fabricloader": ">=0.14.19",
