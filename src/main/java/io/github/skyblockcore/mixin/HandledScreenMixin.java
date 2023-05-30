@@ -8,6 +8,8 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
@@ -37,6 +39,8 @@ public class HandledScreenMixin {
         String itemNBT = "minecraft:" + itemToCopyNBT.getItem().toString() + " " + itemToCopyNBT.getNbt();
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) SkyblockCore.LOGGER.info(TITLE + " [Dev NBT] > " + itemNBT);
         MinecraftClient.getInstance().keyboard.setClipboard(itemNBT);
+        if (MinecraftClient.getInstance().player == null) return;
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT Data has been copied for: ").formatted(Formatting.WHITE).append(itemToCopyNBT.getName()), false);
     }
 
 }
