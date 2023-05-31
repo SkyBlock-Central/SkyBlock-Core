@@ -61,19 +61,22 @@ public class PlayNetworkHandlerMixin {
         if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
             // Simple Logging Statement for developers to easily debug.
             if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-                LOGGER.info(TITLE + " Detected a Different Scoreboard ~ Quitting Skyblock... [Dev Packet] > " + packet.getName());
+                LOGGER.info(TITLE + " Detected a Different Scoreboard [Dev Packet] > " + packet.getName());
             }
-            LOGGER.info(TITLE + " Leaving Skyblock...");
-            if (onSkyblock) LeaveSkyblockCallback.EVENT.invoker().interact();
+            // This is done so developers keep packet info even if the event is not triggered if we are not on SB already.
+            if (!onSkyblock) return;
+            LOGGER.info(TITLE + " Leaving Skyblock");
+            LeaveSkyblockCallback.EVENT.invoker().interact();
             return;
         }
         // Since we've eliminated all other packets, we are free to assume the user has joined Skyblock.
         // Simple Logging Statement for developers to easily debug.
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-            LOGGER.info(TITLE + " Joined Skyblock [Dev Packet] > " + packet.getName());
+            LOGGER.info(TITLE + " Detected Skyblock Scoreboard [Dev Packet] > " + packet.getName());
         }
+        // This is done so developers keep packet info even if the event is not triggered due to already being on SB.
+        if (onSkyblock) return;
         LOGGER.info(TITLE + " Joined Skyblock");
-        if (!onSkyblock) JoinSkyblockCallback.EVENT.invoker().interact();
-
+        JoinSkyblockCallback.EVENT.invoker().interact();
     }
 }
