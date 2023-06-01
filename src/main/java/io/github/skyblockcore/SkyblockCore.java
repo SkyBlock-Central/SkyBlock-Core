@@ -22,8 +22,12 @@ import io.github.skyblockcore.event.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.util.ActionResult;
+import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +51,13 @@ public class SkyblockCore implements ClientModInitializer {
 
     private static String LOCATION;
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
+
+    public static final KeyBinding copyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "skyblockcore.dev.nbtcopy",
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_RIGHT_CONTROL,
+            "skyblockcore.dev"
+    ));
 
 
     @Override
