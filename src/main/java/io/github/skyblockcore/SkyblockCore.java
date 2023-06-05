@@ -19,23 +19,18 @@ package io.github.skyblockcore;
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.skyblockcore.command.SkyblockCoreCommand;
 import io.github.skyblockcore.event.*;
-import io.github.skyblockcore.mixin.HandledScreenFocusedSlotAccessor;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.ActionResult;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.github.skyblockcore.command.SkyblockCoreCommand.NBTCOPYING;
 import static io.github.skyblockcore.event.ConfigManager.loadConfig;
 
 public class SkyblockCore implements ClientModInitializer {
@@ -56,6 +51,13 @@ public class SkyblockCore implements ClientModInitializer {
 
     private static String LOCATION;
     public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
+
+    public static final KeyBinding copyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "skyblockcore.dev.nbtcopy",
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_RIGHT_CONTROL,
+            "skyblockcore.dev"
+    ));
 
 
     @Override
@@ -87,27 +89,6 @@ public class SkyblockCore implements ClientModInitializer {
             LOCATION = newLocation;
             return ActionResult.PASS;
         }));
-        // Source from https://github.com/apace100/show-me-what-you-got for implementation of the mixin.
-        ClientTickEvents.START_CLIENT_TICK.register(tick -> {
-            if (!NBTCOPYING) return;
-            MinecraftClient client = MinecraftClient.getInstance();
-            if (client.player != null && client.currentScreen instanceof HandledScreen) {
-                HandledScreenFocusedSlotAccessor focusedSlotAccessor = (HandledScreenFocusedSlotAccessor) client.currentScreen;
-                Slot focusedSlot = focusedSlotAccessor.getFocusedSlot();
-                boolean isCtrlPressed = InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow().getHandle(), GLFW.GLFW_KEY_RIGHT_CONTROL);
-                if (isCtrlPressed) {
-                    if (client.player.currentScreenHandler.getCursorStack().isEmpty() && focusedSlot != null && focusedSlot.hasStack()) {
-                        ItemStack itemToCopyNBT = focusedSlot.getStack();
-                        if (itemToCopyNBT.getNbt() == null) return;
-                        String itemNBT = "minecraft:" + itemToCopyNBT.getItem().getName().getString() + " " + itemToCopyNBT.getNbt();
-                        if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-                            LOGGER.info(TITLE + " [Dev NBT] > " + itemNBT);
-                        }
-                        MinecraftClient.getInstance().keyboard.setClipboard(itemNBT);
-                    }
-                }
-            }
-        });
 
     }
 
