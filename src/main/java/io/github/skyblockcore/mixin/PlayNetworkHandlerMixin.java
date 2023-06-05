@@ -51,7 +51,7 @@ public class PlayNetworkHandlerMixin {
         if (packet.getName().contains(HEALTH_SCOREBOARD)) {
             // Simple Logging Statement for developers to easily debug.
             if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-                LOGGER.info(TITLE + " Detected Health Scoreboard, Safely ignored! [Dev Packet] > " + packet.getName());
+                sendDebugLog("Detected Health Scoreboard, Safely ignored! [Dev Packet] > " + packet.getName());
             }
             return;
         }
@@ -61,22 +61,22 @@ public class PlayNetworkHandlerMixin {
         if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
             // Simple Logging Statement for developers to easily debug.
             if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-                LOGGER.info(TITLE + " Detected a Different Scoreboard [Dev Packet] > " + packet.getName());
+                sendDebugLog("Detected a Different Scoreboard [Dev Packet] > " + packet.getName());
             }
             // This is done so developers keep packet info even if the event is not triggered if we are not on SB already.
             if (!onSkyblock) return;
-            LOGGER.info(TITLE + " Leaving Skyblock");
+            sendDebugLog("Leaving Skyblock");
             LeaveSkyblockCallback.EVENT.invoker().interact();
             return;
         }
         // Since we've eliminated all other packets, we are free to assume the user has joined Skyblock.
         // Simple Logging Statement for developers to easily debug.
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-            LOGGER.info(TITLE + " Detected Skyblock Scoreboard [Dev Packet] > " + packet.getName());
+            sendDebugLog("Detected Skyblock Scoreboard [Dev Packet] > " + packet.getName());
         }
         // This is done so developers keep packet info even if the event is not triggered due to already being on SB.
         if (onSkyblock) return;
-        LOGGER.info(TITLE + " Joined Skyblock");
+        sendDebugLog("Joined Skyblock");
         JoinSkyblockCallback.EVENT.invoker().interact();
     }
 }

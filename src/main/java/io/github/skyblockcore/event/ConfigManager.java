@@ -3,13 +3,13 @@ package io.github.skyblockcore.event;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
-import static io.github.skyblockcore.SkyblockCore.LOGGER;
-import static io.github.skyblockcore.SkyblockCore.TITLE;
+import static io.github.skyblockcore.SkyblockCore.sendDebugLog;
 
 public class ConfigManager {
 
@@ -24,14 +24,14 @@ public class ConfigManager {
                 Gson gson = new GsonBuilder().create();
                 config = gson.fromJson(reader, ModConfig.class);
                 if (config != null && config.isDev()) {
-                    LOGGER.info(TITLE + " Config file loaded. [Dev]");
+                    sendDebugLog("Config file loaded. [Dev]");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             createConfig();
-            LOGGER.info(TITLE + " Config successfully created! Welcome to SkyblockCore, a Skyblock mod designed for modern Minecraft.");
+            sendDebugLog("Config successfully created! Welcome to SkyblockCore, a Skyblock mod designed for modern Minecraft.");
         }
     }
 /*

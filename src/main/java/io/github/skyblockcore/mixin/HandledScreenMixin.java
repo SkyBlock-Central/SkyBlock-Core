@@ -3,11 +3,8 @@ package io.github.skyblockcore.mixin;
 import io.github.skyblockcore.SkyblockCore;
 import io.github.skyblockcore.command.SkyblockCoreCommand;
 import io.github.skyblockcore.event.ConfigManager;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -15,7 +12,6 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static io.github.skyblockcore.SkyblockCore.TITLE;
+import static io.github.skyblockcore.SkyblockCore.sendDebugLog;
 
 @Mixin(HandledScreen.class)
 public class HandledScreenMixin {
@@ -68,7 +65,7 @@ public class HandledScreenMixin {
         String itemNBT = "minecraft:" + itemToCopyNBT.getItem().toString() + " " + itemToCopyNBT.getNbt();
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
             // Log to console if dev mode is enabled.
-            SkyblockCore.LOGGER.info(TITLE + " [Dev NBT] > " + itemNBT);
+            sendDebugLog("[Dev NBT] > " + itemNBT);
         }
         // Copy the NBT to clipboard.
         MinecraftClient.getInstance().keyboard.setClipboard(itemNBT);
