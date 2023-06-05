@@ -55,7 +55,8 @@ public class SkyblockCoreCommand {
         // This will be similar to "/sba dev" or "/skytils dev nbt".
         if (MinecraftClient.getInstance().player == null) return 0;
         NBTCOPYING = !NBTCOPYING;
-        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT copying has been " + (NBTCOPYING ? "enabled!" : "disabled!")).formatted(Formatting.WHITE), false);
+        Text keybindingEnabled = Text.literal("enabled! (Tip: use ").formatted(Formatting.WHITE).append(Text.keybind("skyblockcore.dev.nbtcopy").formatted(Formatting.YELLOW)).append(Text.literal(" to copy an items NBT data to clipboard.)").formatted(Formatting.WHITE));
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT copying has been ").formatted(Formatting.WHITE).append((NBTCOPYING ? keybindingEnabled : Text.literal("disabled!").formatted(Formatting.WHITE))), false);
         return Command.SINGLE_SUCCESS;
     }
 
