@@ -55,7 +55,7 @@ public class SkyblockCore implements ClientModInitializer {
     public static final KeyBinding copyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "skyblockcore.dev.nbtcopy",
             InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_RIGHT_CONTROL,
+            GLFW.GLFW_KEY_UNKNOWN,
             "skyblockcore.dev"
     ));
 

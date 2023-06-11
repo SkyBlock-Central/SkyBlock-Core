@@ -21,7 +21,6 @@ public class SkyblockCoreCommand {
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {
         LiteralArgumentBuilder<FabricClientCommandSource> skyblockcore = literal("skyblockcore");
         skyblockcore.then(literal("reload").executes(ctx -> reloadConfig()));
-        skyblockcore.then(literal("nbt").executes(ctx -> nbt()));
         skyblockcore.then(literal("dev").executes(ctx -> dev()));
         skyblockcore.then(literal("test").executes(ctx -> test()));
         skyblockcore.then(literal("LogSpam").executes(ctx -> player()));
@@ -46,16 +45,6 @@ public class SkyblockCoreCommand {
         MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Config file Reloaded in: " + System.currentTimeMillis() + " ms").formatted(Formatting.WHITE), false);
 
 
-        return Command.SINGLE_SUCCESS;
-    }
-
-    private static int nbt() {
-        // Practically done. Needs help in the main class for copying.
-        // TODO Implement NBT Handling Logic here
-        // This will be similar to "/sba dev" or "/skytils dev nbt".
-        if (MinecraftClient.getInstance().player == null) return 0;
-        NBTCOPYING = !NBTCOPYING;
-        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT copying has been " + (NBTCOPYING ? "enabled!" : "disabled!")).formatted(Formatting.WHITE), false);
         return Command.SINGLE_SUCCESS;
     }
 
