@@ -24,7 +24,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "io.github.skyblockcore.SkyblockCore"
+      "io.github.skyblockcore.SkyBlockCore"
     ]
   },
   "mixins": [

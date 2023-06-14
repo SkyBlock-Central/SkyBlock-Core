@@ -1,6 +1,6 @@
 package io.github.skyblockcore.mixin;
 
-import io.github.skyblockcore.SkyblockCore;
+import io.github.skyblockcore.SkyBlockCore;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.text.Text;
@@ -14,7 +14,7 @@ public class ClientConnectionMixin {
 
     @Inject(method = "disconnect", at = @At("HEAD"))
     void onDisconnect(Text disconnectReason, CallbackInfo ci) {
-        if (!SkyblockCore.isOnSkyblock()) return;
+        if (!SkyBlockCore.isOnSkyblock()) return;
         LeaveSkyblockCallback.EVENT.invoker().interact();
     }
 

@@ -17,7 +17,7 @@
 package io.github.skyblockcore;
 
 import com.mojang.brigadier.CommandDispatcher;
-import io.github.skyblockcore.command.SkyblockCoreCommand;
+import io.github.skyblockcore.command.SkyBlockCoreCommand;
 import io.github.skyblockcore.event.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -33,10 +33,10 @@ import org.slf4j.LoggerFactory;
 
 import static io.github.skyblockcore.event.ConfigManager.loadConfig;
 
-public class SkyblockCore implements ClientModInitializer {
+public class SkyBlockCore implements ClientModInitializer {
 
     public static final String ModID = "skyblockcore";
-    public static final String TITLE = "[SkyblockCore]";
+    public static final String TITLE = "[SkyBlockCore]";
     public static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
     public static final String HEALTH_SCOREBOARD = "health";
     private static boolean ON_SKYBLOCK = false;
@@ -68,8 +68,8 @@ public class SkyblockCore implements ClientModInitializer {
 
         ConsoleLogFilter.installFilter();
 
-        ClientCommandRegistrationCallback.EVENT.register(SkyblockCore::registerCommands);
-        //ModConfig config = SkyblockCore.getConfig();
+        ClientCommandRegistrationCallback.EVENT.register(SkyBlockCore::registerCommands);
+        //ModConfig config = SkyBlockCore.getConfig();
         // example of events, TODO; move to a better class
         JoinSkyblockCallback.EVENT.register(() -> {
             ON_SKYBLOCK = true;
@@ -93,6 +93,6 @@ public class SkyblockCore implements ClientModInitializer {
     }
 
     public static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
-        SkyblockCoreCommand.register(dispatcher);
+        SkyBlockCoreCommand.register(dispatcher);
     }
 }

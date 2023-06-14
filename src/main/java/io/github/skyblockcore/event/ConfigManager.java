@@ -3,13 +3,11 @@ package io.github.skyblockcore.event;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
-import static io.github.skyblockcore.SkyblockCore.LOGGER;
-import static io.github.skyblockcore.SkyblockCore.TITLE;
+import static io.github.skyblockcore.SkyBlockCore.LOGGER;
+import static io.github.skyblockcore.SkyBlockCore.TITLE;
 
 public class ConfigManager {
 
@@ -31,7 +29,7 @@ public class ConfigManager {
             }
         } else {
             createConfig();
-            LOGGER.info(TITLE + " Config successfully created! Welcome to SkyblockCore, a Skyblock mod designed for modern Minecraft.");
+            LOGGER.info(TITLE + " Config successfully created! Welcome to SkyBlockCore, a Skyblock mod designed for modern Minecraft.");
         }
     }
 /*
@@ -44,7 +42,7 @@ public class ConfigManager {
         config = new ModConfig(); // Below toggles will only change every time you wipe a config!
         config.setDev(false); // This will set all development features and logs to "TRUE". this is used for debugging errors with leaving/joining skyblock.
         config.setUnknownPlayer(true); // Don't use unless you want random UUID strings its annoying and I hated it. so now its gone!
-        config.setLocation(false); // this is used for location output (see SkyblockCore file > location stuff) this is used for debugging new locations.
+        config.setLocation(false); // this is used for location output (see SkyBlockCore file > location stuff) this is used for debugging new locations.
         saveConfig();
     }
 

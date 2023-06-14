@@ -1,6 +1,6 @@
 package io.github.skyblockcore.mixin;
 
-import io.github.skyblockcore.SkyblockCore;
+import io.github.skyblockcore.SkyBlockCore;
 import io.github.skyblockcore.event.ConfigManager;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static io.github.skyblockcore.SkyblockCore.*;
+import static io.github.skyblockcore.SkyBlockCore.*;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class PlayNetworkHandlerMixin {
@@ -22,7 +22,7 @@ public class PlayNetworkHandlerMixin {
     @Inject(method = "onTeam", at = @At("TAIL"))
     void onTeam(TeamS2CPacket packet, CallbackInfo ci) {
         // Check that the player is actually on Skyblock before processing team update
-        if (!SkyblockCore.isOnSkyblock()) return;
+        if (!SkyBlockCore.isOnSkyblock()) return;
 
         // SkyBlock represents lines on the scoreboard as teams
         if (packet.getTeam().isEmpty()) {
@@ -36,8 +36,8 @@ public class PlayNetworkHandlerMixin {
         if (scoreboardLine.length() > 0 && scoreboardLine.charAt(0) == '\u23E3') {
             // This is a location line
             String location = scoreboardLine.split("\u23E3 ")[1];
-            if (location.equals(SkyblockCore.getLocation())) return; // Location didn't change
-            LocationChangedCallback.EVENT.invoker().interact(SkyblockCore.getLocation(), location);
+            if (location.equals(SkyBlockCore.getLocation())) return; // Location didn't change
+            LocationChangedCallback.EVENT.invoker().interact(SkyBlockCore.getLocation(), location);
         }
     }
 
@@ -55,7 +55,7 @@ public class PlayNetworkHandlerMixin {
             }
             return;
         }
-        boolean onSkyblock = SkyblockCore.isOnSkyblock();
+        boolean onSkyblock = SkyBlockCore.isOnSkyblock();
         // If we receive a packet other than "health" or "SBScoreboard" we say the user has "left" skyblock.
         // This may need to have more names added on in time if skyblock ever removes/changes "SBScoreboard"
         if (!packet.getName().contains(SKYBLOCK_SCOREBOARD)) {
