@@ -20,7 +20,7 @@ public class APIUtils {
     public static String getUsername(String uuid) {
         JsonElement PlayerData = null;
         if (CachedData.containsValue(uuid)) {
-            System.out.println("Using cached player data...");
+            LOGGER.info("Using cached player data...");
             return CachedData.inverse().get(uuid);
         }
         try {
@@ -43,7 +43,7 @@ public class APIUtils {
     public static String getUUID(String username) {
         JsonElement PlayerData = null;
         if (CachedData.containsKey(username)) {
-            System.out.println("Using cached player data...");
+            LOGGER.info("Using cached player data...");
             return CachedData.get(username);
         }
         try {
