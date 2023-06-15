@@ -16,12 +16,12 @@ import static io.github.skyblockcore.SkyBlockCore.LOGGER;
 
 public class APIUtils {
 
-    private static BiMap<String, String> CachedData = HashBiMap.create();
+    private static BiMap<String, String> cachedData = HashBiMap.create();
     public static String getUsername(String uuid) {
-        JsonElement PlayerData = null;
-        if (CachedData.containsValue(uuid)) {
+        JsonElement playerData = null;
+        if (cachedData.containsValue(uuid)) {
             LOGGER.info("Using cached player data...");
-            return CachedData.inverse().get(uuid);
+            return cachedData.inverse().get(uuid);
         }
         try {
             URL userinfo = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid);
@@ -29,22 +29,22 @@ public class APIUtils {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(urlConnect.getInputStream()));
 
-            PlayerData = JsonParser.parseReader(in);
+            playerData = JsonParser.parseReader(in);
 
         } catch(IOException e) {
             LOGGER.info(String.valueOf(e));
         }
 
-        CachedData.put(PlayerData.getAsJsonObject().get("name").getAsString(), PlayerData.getAsJsonObject().get("id").getAsString());
+        cachedData.put(playerData.getAsJsonObject().get("name").getAsString(), playerData.getAsJsonObject().get("id").getAsString());
 
-        return PlayerData.getAsJsonObject().get("name").getAsString();
+        return playerData.getAsJsonObject().get("name").getAsString();
     }
 
     public static String getUUID(String username) {
-        JsonElement PlayerData = null;
-        if (CachedData.containsKey(username)) {
+        JsonElement playerData = null;
+        if (cachedData.containsKey(username)) {
             LOGGER.info("Using cached player data...");
-            return CachedData.get(username);
+            return cachedData.get(username);
         }
         try {
             URL userinfo = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
@@ -52,14 +52,14 @@ public class APIUtils {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(urlConnect.getInputStream()));
 
-            PlayerData = JsonParser.parseReader(in);
+            playerData = JsonParser.parseReader(in);
 
         } catch (IOException e) {
             LOGGER.info(String.valueOf(e));
         }
 
-        CachedData.put(PlayerData.getAsJsonObject().get("name").getAsString(), PlayerData.getAsJsonObject().get("id").getAsString());
+        cachedData.put(playerData.getAsJsonObject().get("name").getAsString(), playerData.getAsJsonObject().get("id").getAsString());
 
-        return PlayerData.getAsJsonObject().get("id").getAsString();
+        return playerData.getAsJsonObject().get("id").getAsString();
     }
 }
