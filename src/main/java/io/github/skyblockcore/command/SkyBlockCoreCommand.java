@@ -11,11 +11,11 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
-import static io.github.skyblockcore.SkyblockCore.*;
+import static io.github.skyblockcore.SkyBlockCore.*;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
 
 
-public class SkyblockCoreCommand {
+public class SkyBlockCoreCommand {
     public static boolean NBTCOPYING = false;
 
     public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher) {

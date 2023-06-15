@@ -37,7 +37,7 @@ public class ModConfig {
 *
 * 1: delete the current config!
 
-* 2: go to SkyblockCore and add a line at 77
+* 2: go to SkyBlockCore and add a line at 77
 
 config.setThing(false);
 
@@ -60,7 +60,7 @@ config.setThing(false);
  * okay now you should have a usable thing!
  * To use do this
  * 5:
-             ModConfig config = SkyblockCore.getThing();
+             ModConfig config = SkyBlockCore.getThing();
             if (config != null && config.isThing()) {
                 wow you just made a config value!
             }
