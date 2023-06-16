@@ -1,54 +1,60 @@
 package io.github.skyblockcore.util;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.google.gson.JsonElement;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
-
-import static io.github.skyblockcore.SkyBlockCore.LOGGER;
+import static io.github.skyblockcore.SkyblockCore.LOGGER;
 
 public class APIUtils {
 
-    private static BiMap<String, String> cachedData = HashBiMap.create();
+    private static final Cache<String, String> uuidToUsernameCache = CacheBuilder.newBuilder().expireAfterWrite(15, TimeUnit.MINUTES).build();
+
     public static String getUsername(String uuid) {
-        if (cachedData.containsValue(uuid)) {
+        String cachedUsername = uuidToUsernameCache.getIfPresent(uuid);
+        if (cachedUsername != null) {
             LOGGER.info("Using cached player data...");
-            return cachedData.inverse().get(uuid);
+            return cachedUsername;
         }
 
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid).openConnection().getInputStream()))) {
-            JsonElement playerData = JsonParser.parseReader(in);
+        try (InputStreamReader in = new InputStreamReader(new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid).openConnection().getInputStream())) {
+            JsonObject playerData = JsonParser.parseReader(in).getAsJsonObject();
 
-            cachedData.put(playerData.getAsJsonObject().get("name").getAsString(), playerData.getAsJsonObject().get("id").getAsString());
+            String username = playerData.get("name").getAsString();
+            uuidToUsernameCache.put(playerData.get("id").getAsString(), username);
 
-            return playerData.getAsJsonObject().get("name").getAsString();
+            return username;
         } catch (IOException e) {
-            LOGGER.info(String.valueOf(e));
+            LOGGER.error(e.getMessage(), e);
+            return null;
         }
-        return "";
     }
 
     public static String getUUID(String username) {
-        if (cachedData.containsKey(username)) {
+        Optional<Map.Entry<String, String>> cachedUuid = uuidToUsernameCache.asMap().entrySet().stream().filter(e -> e.getValue().equalsIgnoreCase(username)).findAny();
+        if (cachedUuid.isPresent()) {
             LOGGER.info("Using cached player data...");
-            return cachedData.get(username);
+            return cachedUuid.get().getKey();
         }
 
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + username).openConnection().getInputStream()))) {
-            JsonElement playerData = JsonParser.parseReader(in);
+        try (InputStreamReader in = new InputStreamReader(new URL("https://api.mojang.com/users/profiles/minecraft/" + username).openConnection().getInputStream())) {
+            JsonObject playerData = JsonParser.parseReader(in).getAsJsonObject();
 
-            cachedData.put(playerData.getAsJsonObject().get("name").getAsString(), playerData.getAsJsonObject().get("id").getAsString());
+            String uuid = playerData.get("id").getAsString();
+            uuidToUsernameCache.put(uuid, playerData.get("name").getAsString());
 
-            return playerData.getAsJsonObject().get("id").getAsString();
+            return uuid;
         } catch (IOException e) {
-            LOGGER.info(String.valueOf(e));
+            LOGGER.error(e.getMessage(), e);
+            return null;
         }
-        return "";
     }
 }
