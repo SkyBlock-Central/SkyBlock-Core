@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import static io.github.skyblockcore.SkyblockCore.LOGGER;
+import static io.github.skyblockcore.SkyBlockCore.LOGGER;
 
 public class APIUtils {
 
