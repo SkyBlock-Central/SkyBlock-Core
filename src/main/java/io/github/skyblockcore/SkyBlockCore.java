@@ -59,6 +59,10 @@ public class SkyBlockCore implements ClientModInitializer {
             "skyblockcore.dev"
     ));
 
+    public static void sendDebugLog(String text) {
+        LOGGER.info(TITLE + " " + text);
+    }
+
 
     @Override
     public void onInitializeClient() {
@@ -83,8 +87,8 @@ public class SkyBlockCore implements ClientModInitializer {
         LocationChangedCallback.EVENT.register(((oldLocation, newLocation) -> {
             // Simple Logging Statement for mod developers to debug locations affecting their code.
             if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isLocation()) {
-                LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev Old Location] > " + oldLocation);
-                LOGGER.info(TITLE + " Detected Location Change on Scoreboard! [Dev New Location] > " + newLocation);
+                sendDebugLog("Detected Location Change on Scoreboard! [Dev Old Location] > " + oldLocation);
+                sendDebugLog("Detected Location Change on Scoreboard! [Dev New Location] > " + newLocation);
             }
             LOCATION = newLocation;
             return ActionResult.PASS;
