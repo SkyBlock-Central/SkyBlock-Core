@@ -21,7 +21,6 @@ public class APIUtils {
     public static String getUsername(String uuid) {
         String cachedUsername = uuidToUsernameCache.getIfPresent(uuid);
         if (cachedUsername != null) {
-            LOGGER.info("Using cached player data...");
             return cachedUsername;
         }
 
@@ -41,7 +40,6 @@ public class APIUtils {
     public static String getUUID(String username) {
         Optional<Map.Entry<String, String>> cachedUuid = uuidToUsernameCache.asMap().entrySet().stream().filter(e -> e.getValue().equalsIgnoreCase(username)).findAny();
         if (cachedUuid.isPresent()) {
-            LOGGER.info("Using cached player data...");
             return cachedUuid.get().getKey();
         }
 
