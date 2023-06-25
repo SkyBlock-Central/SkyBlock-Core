@@ -20,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static io.github.skyblockcore.SkyBlockCore.TITLE;
+import static io.github.skyblockcore.SkyBlockCore.sendDebugLog;
 
 @Mixin(HandledScreen.class)
 public class HandledScreenMixin {
@@ -64,7 +65,7 @@ public class HandledScreenMixin {
         String itemNBT = "minecraft:" + itemToCopyNBT.getItem().toString() + " " + itemToCopyNBT.getNbt();
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
             // Log to console if dev mode is enabled.
-            SkyBlockCore.LOGGER.info(TITLE + " [Dev NBT] > " + itemNBT);
+            sendDebugLog("[Dev NBT] > " + itemNBT);
         }
         // Copy the NBT to clipboard.
         MinecraftClient.getInstance().keyboard.setClipboard(itemNBT);

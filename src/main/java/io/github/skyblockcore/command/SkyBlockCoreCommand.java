@@ -32,7 +32,7 @@ public class SkyBlockCoreCommand {
     private static int test() {
         // example command
         if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-            LOGGER.info(TITLE + " woah!! [dev]");
+            sendDebugLog("woah!! [dev]");
         }
         if (MinecraftClient.getInstance().player == null) return 0;
         MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Test command, cool that you found this, easter egg ig! well anyways, hi from Axle!").formatted(Formatting.AQUA), false);
@@ -41,7 +41,7 @@ public class SkyBlockCoreCommand {
 
     private static int reloadConfig() {
         ConfigManager.reloadConfig(); // Reload the config
-        LOGGER.info(TITLE + " Reloaded Config!");
+        sendDebugLog("Reloaded Config!");
         if (MinecraftClient.getInstance().player == null) return 0;
         MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Config file Reloaded in: " + System.currentTimeMillis() + " ms").formatted(Formatting.WHITE), false);
 
@@ -55,7 +55,8 @@ public class SkyBlockCoreCommand {
         // This will be similar to "/sba dev" or "/skytils dev nbt".
         if (MinecraftClient.getInstance().player == null) return 0;
         NBTCOPYING = !NBTCOPYING;
-        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT copying has been " + (NBTCOPYING ? "enabled!" : "disabled!")).formatted(Formatting.WHITE), false);
+        Text keybindingEnabled = Text.literal("enabled! (Tip: use ").formatted(Formatting.WHITE).append(Text.keybind("skyblockcore.dev.nbtcopy").formatted(Formatting.YELLOW)).append(Text.literal(" to copy an items NBT data to clipboard.)").formatted(Formatting.WHITE));
+        MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " NBT copying has been ").formatted(Formatting.WHITE).append((NBTCOPYING ? keybindingEnabled : Text.literal("disabled!").formatted(Formatting.WHITE))), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -65,7 +66,7 @@ public class SkyBlockCoreCommand {
             boolean currentDevSetting = config.isDev();
             config.setDev(!currentDevSetting); // Toggle the dev mode setting
             ConfigManager.saveConfig(); // Save the updated config
-            LOGGER.info(TITLE + " Successfully " + (currentDevSetting ? "disabled" : "enabled") + " Developer mode!");
+            sendDebugLog("Successfully " + (currentDevSetting ? "disabled" : "enabled") + " Developer mode!");
             if (MinecraftClient.getInstance().player == null) return 0;
             MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Dev mode " + (currentDevSetting ? "Disabled" : "Enabled")).formatted(Formatting.WHITE), false);
         }
@@ -78,7 +79,7 @@ public class SkyBlockCoreCommand {
             boolean currentLocationSetting = config.isLocation();
             config.setLocation(!currentLocationSetting); // Toggle the location setting
             ConfigManager.saveConfig(); // Save the updated config
-            LOGGER.info(TITLE + " Successfully " + (currentLocationSetting ? "disabled" : "enabled") + " location logging!");
+            sendDebugLog("Successfully " + (currentLocationSetting ? "disabled" : "enabled") + " location logging!");
             if (MinecraftClient.getInstance().player == null) return 0;
             MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Location data " + (currentLocationSetting ? "Disabled" : "Enabled")).formatted(Formatting.WHITE), false);
         }
@@ -97,13 +98,9 @@ public class SkyBlockCoreCommand {
             ConfigManager.saveConfig(); // Save the updated config
             if (MinecraftClient.getInstance().player == null) return 0;
             if (ConfigManager.getConfig() != null && ConfigManager.getConfig().isDev()) {
-                LOGGER.info(TITLE + " Warning! You have " + (currentPlayerSetting ? "disabled" : "enabled") + " \"Ignoring player info update\"");
+                sendDebugLog("Warning! You have " + (currentPlayerSetting ? "disabled" : "enabled") + " \"Ignoring player info update\"");
             }
-            MinecraftClient.getInstance().player.sendMessage(
-                    Text.literal(TITLE + " Warning! You have " + (currentPlayerSetting ? "disabled" : "enabled") + " \"Ignoring player info update\"")
-                            .setStyle(Style.EMPTY.withColor(Formatting.WHITE)),
-                    false
-            );
+            MinecraftClient.getInstance().player.sendMessage(Text.literal(TITLE + " Warning! You have " + (currentPlayerSetting ? "disabled" : "enabled") + " \"Ignoring player info update\"").setStyle(Style.EMPTY.withColor(Formatting.WHITE)), false);
         }
         return Command.SINGLE_SUCCESS;
     }
