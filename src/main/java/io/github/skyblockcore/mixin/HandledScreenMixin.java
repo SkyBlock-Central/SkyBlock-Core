@@ -1,7 +1,6 @@
 package io.github.skyblockcore.mixin;
 
 import io.github.skyblockcore.SkyBlockCore;
-import io.github.skyblockcore.command.SkyBlockCoreCommand;
 import io.github.skyblockcore.event.ConfigManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -43,8 +42,6 @@ public class HandledScreenMixin {
      */
     @Inject(method = "keyPressed", at = @At("HEAD"))
     void onKeyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        // Ensure the NBT copying functionality is enabled.
-        if (!SkyBlockCoreCommand.NBTCOPYING) return;
 
         // Check that the player has pressed the nbt-copy key.
         if (!SkyBlockCore.copyBinding.matchesKey(keyCode, scanCode)) return;
