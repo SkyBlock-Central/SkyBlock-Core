@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.skyblockcore.event.ConfigManager;
 import io.github.skyblockcore.event.ModConfig;
+import io.github.skyblockcore.player.PlayerListAPI;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
@@ -26,6 +27,7 @@ public class SkyBlockCoreCommand {
         skyblockcore.then(literal("test").executes(ctx -> test()));
         skyblockcore.then(literal("LogSpam").executes(ctx -> player()));
         skyblockcore.then(literal("location").executes(ctx -> location()));
+        skyblockcore.then(literal("tablist").executes(ctx -> PlayerListAPI.testGetData()));
         dispatcher.register(skyblockcore);
     }
 
