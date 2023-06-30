@@ -9,6 +9,7 @@
   "client": [
     "HandledScreenFocusedSlotAccessor",
     "HandledScreenMixin",
+    "PlayerListHudAccessor",
     "PlayNetworkHandlerMixin"
   ],
   "injectors": {
