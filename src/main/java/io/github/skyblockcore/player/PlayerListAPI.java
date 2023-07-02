@@ -43,12 +43,12 @@ public class PlayerListAPI {
     }
 
     /**
-     * @return the entierety of the Player List Hud, whithout limiting to 80 entries.
-     * @throws IllegalStateException if player is not initialized.
+     * @return the entirety of the Player List Hud, without limiting to 80 entries.
+     * @throws IllegalStateException if the player is not initialized.
      */
     public static List<PlayerListEntry> getPlayerListEntries() {
         if (client.player == null) {
-            throw new IllegalStateException("player is not initialized");
+            throw new IllegalStateException("Player is not initialized");
         }
         return client.player.networkHandler.getListedPlayerListEntries().stream().sorted().toList();
     }
@@ -127,7 +127,7 @@ public class PlayerListAPI {
                 columnNames.add(columnKey);
                 if (!categories.containsKey(columnKey)) {
                     categories.put(columnKey, new ArrayList<>());
-                    categories.get(columnKey).add(cloneEntry(entry));
+                    categories.get(columnKey).add(entry);
                 }
             } else if (rowPos != 0) {
                 if (skipEmpty && (entry.getDisplayName() == null || entry.getDisplayName().getString().trim().equals(""))) {
@@ -138,11 +138,11 @@ public class PlayerListAPI {
                 //not the first one
                 if (columnNames.size() <= columnPos) {
                     //no key found for column.
-                    categories.get("UNKNOWN").add(cloneEntry(entry));
+                    categories.get("UNKNOWN").add(entry);
                     continue;
                 }
                 String columnKey = columnNames.get(columnPos);
-                categories.get(columnKey).add(cloneEntry(entry));
+                categories.get(columnKey).add(entry);
             }
         }
 
@@ -196,7 +196,7 @@ public class PlayerListAPI {
                 continue;
             }
 
-            categories.get(lastKey).add(line.copy());
+            categories.get(lastKey).add(line);
         }
 
         return categories;
@@ -259,32 +259,6 @@ public class PlayerListAPI {
             key = key.substring(0, key.length()-1);
         }
         return key;
-    }
-
-    /**
-     * Copies an instance of {@link PlayerListEntry}
-     * @apiNote  Upon minecraft version update, it is really possible this method might break, either due to missing data or because minecraft changed how Player List Entries work.
-     * last updated for 1.19.4
-     */
-    private static PlayerListEntry cloneEntry(PlayerListEntry original) {
-        try {
-            GameProfile clonedProfile = new GameProfile(original.getProfile().getId(), original.getProfile().getName());
-            PlayerListEntry clone = new PlayerListEntry(clonedProfile, false);
-            if (original.getDisplayName() != null) {
-                clone.setDisplayName(original.getDisplayName().copy());
-            }
-            return clone;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Create fake player list entry
-     */
-    public static PlayerListEntry createFakeEntry() {
-        return new PlayerListEntry(new GameProfile(NIL, "fake_entry"), false);
     }
 
     /**
