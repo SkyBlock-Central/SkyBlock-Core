@@ -1,25 +1,15 @@
 package io.github.skyblockcore.player;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.context.CommandContext;
-import io.github.skyblockcore.SkyBlockCore;
 import io.github.skyblockcore.mixin.PlayerListHudAccessor;
 import io.github.skyblockcore.util.TextUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
-import net.minecraft.util.Formatting;
 
 /**
  * Relies on {@link PlayerListHud}
@@ -27,7 +17,6 @@ import net.minecraft.util.Formatting;
  */
 public class PlayerListAPI {
     private static final MinecraftClient client = MinecraftClient.getInstance();
-    private static final UUID NIL = new UUID(0, 0);
 
     /**
      * @return the first 80 entries of the player list hud (as rendered in the tab list) see {@link PlayerListHud#collectPlayerEntries()}.
@@ -54,7 +43,7 @@ public class PlayerListAPI {
     }
 
     /**
-     * @return the tab list header see {@link PlayerListHud#header}
+     * @return the tab list header see {@link PlayerListHud#header}.
      * @throws IllegalStateException if InGameHud or PlayerListHud is not initialized.
      */
     public static Text getHeader() {
@@ -75,7 +64,7 @@ public class PlayerListAPI {
     }
 
     /**
-     * @return the tab list footer see {@link PlayerListHud#footer}
+     * @return the tab list footer see {@link PlayerListHud#footer}.
      * @throws IllegalStateException if InGameHud or PlayerListHud is not initialized.
      */
     public static Text getFooter() {
@@ -146,9 +135,6 @@ public class PlayerListAPI {
             }
         }
 
-        for (Map.Entry<String, List<PlayerListEntry>> entry: categories.entrySet()) {
-            SkyBlockCore.LOGGER.info(entry.getKey() + " size: " + entry.getValue().size());
-        }
         return categories;
     }
 
@@ -167,7 +153,7 @@ public class PlayerListAPI {
     }
 
     /**
-     * @param orderedText the list to get the categories from
+     * @param orderedText the list to get the categories from.
      * @return the data in the given list, sorted into categories, whatever was not in a category is placed under UNKNOWN.
      */
     private static Map<String, List<Text>> getCategoriesFromOrderedText(List<Text> orderedText) {
@@ -250,7 +236,8 @@ public class PlayerListAPI {
 
 
     /**
-     * Clean Category key
+     * @param key the key you want cleaned.
+     * @return cleaned category key.
      */
     private static String cleanKey(String key) {
         key = key.trim().toUpperCase();
@@ -259,91 +246,5 @@ public class PlayerListAPI {
             key = key.substring(0, key.length()-1);
         }
         return key;
-    }
-
-    /**
-     * Dumps data about the tab list in the player's chat.
-     * I know, I know, it's pretty shit, but it's only supposed to be a test, so I don't really care that much to be honest.
-     * @return whether it succeeded or not
-     */
-    public static int testGetData(CommandContext<FabricClientCommandSource> ctx) {
-        if (!SkyBlockCore.isOnSkyblock()) {
-            return 0;
-        }
-
-        if (ctx.getInput().endsWith("tablist")) {
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Tablist"));
-            for (Map.Entry<String, List<PlayerListEntry>> entry: getPlayerListCategories(true).entrySet()) {
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(Text.of(entry.getKey()).getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.AQUA)), Text.of("")));
-                for (PlayerListEntry plEntry: entry.getValue()) {
-                    if (plEntry.getDisplayName() != null) {
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(plEntry.getDisplayName());
-                    }
-                }
-            }
-
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Headers"));
-            for (Map.Entry<String, List<Text>> entry: getHeaderCategories().entrySet()) {
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(Text.of(entry.getKey()).getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.AQUA)), Text.of("")));
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(entry.getValue(), Text.of("\n")));
-            }
-
-            MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Footers"));
-            for (Map.Entry<String, List<Text>> entry: getFooterCategories().entrySet()) {
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(Text.of(entry.getKey()).getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.AQUA)), Text.of("")));
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(entry.getValue(), Text.of("\n")));
-            }
-        } else {
-            String arg = ctx.getArgument("type", String.class);
-            switch(arg) {
-                case "tablist" -> {
-                    MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Tablist"));
-                    for (Map.Entry<String, List<PlayerListEntry>> entry: getPlayerListCategories(true).entrySet()) {
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(Text.of(entry.getKey()).getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.AQUA)), Text.of("")));
-                        for (PlayerListEntry plEntry: entry.getValue()) {
-                            if (plEntry.getDisplayName() != null) {
-                                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(plEntry.getDisplayName());
-                            }
-                        }
-                    }
-                }
-                case "header" -> {
-                    MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Headers"));
-                    for (Map.Entry<String, List<Text>> entry: getHeaderCategories().entrySet()) {
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(Text.of(entry.getKey()).getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.AQUA)), Text.of("")));
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(entry.getValue(), Text.of("\n")));
-                    }
-                }
-                case "footer" -> {
-                    MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of("Footers"));
-                    for (Map.Entry<String, List<Text>> entry: getFooterCategories().entrySet()) {
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(Text.of(entry.getKey()).getWithStyle(Style.EMPTY.withBold(true).withColor(Formatting.AQUA)), Text.of("")));
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(entry.getValue(), Text.of("\n")));
-                    }
-                }
-                default -> {
-                    MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Text.of(arg));
-
-                    List<PlayerListEntry> tab = getEntriesForCategory(arg);
-                    if (tab.size() > 0) {
-                        for (PlayerListEntry plEntry: tab) {
-                            if (plEntry.getDisplayName() != null) {
-                                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(plEntry.getDisplayName());
-                            }
-                        }
-                    }
-                    List<Text> header = getCategoryInHeader(arg);
-                    if (header.size() > 0) {
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(header, Text.of("\n")));
-                    }
-                    List<Text> footer = getCategoryInFooter(arg);
-                    if (footer.size() > 0) {
-                        MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(Texts.join(footer, Text.of("\n")));
-                    }
-                }
-            }
-        }
-
-        return 1;
     }
 }

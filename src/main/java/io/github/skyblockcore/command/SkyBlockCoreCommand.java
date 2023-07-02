@@ -2,12 +2,9 @@ package io.github.skyblockcore.command;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import io.github.skyblockcore.event.ConfigManager;
 import io.github.skyblockcore.event.ModConfig;
-import io.github.skyblockcore.player.PlayerListAPI;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
@@ -16,7 +13,6 @@ import net.minecraft.util.Formatting;
 
 import static io.github.skyblockcore.SkyBlockCore.*;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
-import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 
 public class SkyBlockCoreCommand {
@@ -30,9 +26,6 @@ public class SkyBlockCoreCommand {
         skyblockcore.then(literal("test").executes(ctx -> test()));
         skyblockcore.then(literal("LogSpam").executes(ctx -> player()));
         skyblockcore.then(literal("location").executes(ctx -> location()));
-
-        skyblockcore.then(literal("tablist").executes(PlayerListAPI::testGetData));
-        skyblockcore.then(literal("tablist").then(argument("type", StringArgumentType.word()).executes(PlayerListAPI::testGetData)));
         dispatcher.register(skyblockcore);
     }
 
