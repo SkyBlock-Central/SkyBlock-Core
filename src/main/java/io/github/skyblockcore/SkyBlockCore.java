@@ -18,6 +18,7 @@ package io.github.skyblockcore;
 
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.skyblockcore.command.SkyBlockCoreCommand;
+import io.github.skyblockcore.dungeons.DungeonUtils;
 import io.github.skyblockcore.event.*;
 import io.github.skyblockcore.event.dungeons.*;
 import net.fabricmc.api.ClientModInitializer;
@@ -50,7 +51,8 @@ public class SkyBlockCore implements ClientModInitializer {
     // Dungeons
     private static boolean IN_DUNGEON = false;
     private static boolean DUNGEON_ACTIVE = false;
-    private static boolean ENTERED_BOSSFIGHT = false;
+    public static boolean ENTERED_BOSSFIGHT = false;
+    public static DungeonUtils.DUNGEON_CLASSES DUNGEON_CLASS = DungeonUtils.DUNGEON_CLASSES.HEALER;
 
     public static boolean isOnSkyblock() {
         return ON_SKYBLOCK;
@@ -59,7 +61,6 @@ public class SkyBlockCore implements ClientModInitializer {
     public static boolean isDungeonActive() {
         return DUNGEON_ACTIVE;
     }
-    public static boolean isInBossFight() {return ENTERED_BOSSFIGHT;}
 
     public static final KeyBinding copyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "skyblockcore.dev.nbtcopy",
@@ -105,7 +106,7 @@ public class SkyBlockCore implements ClientModInitializer {
             ENTERED_BOSSFIGHT = false;
             return ActionResult.PASS;
         });
-        DungeonStartedCallback.EVENT.register(() -> {
+        DungeonStartedCallback.EVENT.register((dungeonClass) -> {
             DUNGEON_ACTIVE = true;
             return ActionResult.PASS;
         });
@@ -124,17 +125,19 @@ public class SkyBlockCore implements ClientModInitializer {
         BloodDoorOpenedCallback.EVENT.register(() -> {
             return ActionResult.PASS;
         });
-        EnteredBossfightCallback.EVENT.register(() -> {
-            ENTERED_BOSSFIGHT = true;
+        EnteredBossfightCallback.EVENT.register((boss) -> {
+            if(boss == null) return ActionResult.FAIL;
             return ActionResult.PASS;
         });
-        DungeonEndedCallback.EVENT.register(() -> {
+        DungeonEndedCallback.EVENT.register((score) -> {
             DUNGEON_ACTIVE = false;
             return ActionResult.PASS;
         });
         LeaveDungeonCallback.EVENT.register(() -> {
             IN_DUNGEON = false;
+            DUNGEON_ACTIVE = false;
             ENTERED_BOSSFIGHT = false;
+            DungeonUtils.setDungeonBoss(null);
             return ActionResult.PASS;
         });
     }

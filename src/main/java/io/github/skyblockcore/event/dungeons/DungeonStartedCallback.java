@@ -1,19 +1,20 @@
 package io.github.skyblockcore.event.dungeons;
 
+import io.github.skyblockcore.dungeons.DungeonUtils;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.util.ActionResult;
 
 public interface DungeonStartedCallback {
     Event<DungeonStartedCallback> EVENT = EventFactory.createArrayBacked(DungeonStartedCallback.class,
-            (listeners) -> () -> {
+            (listeners) -> (dungeonClass) -> {
                 for (DungeonStartedCallback listener : listeners) {
-                    ActionResult result = listener.interact();
+                    ActionResult result = listener.interact(dungeonClass);
 
                     if (result != ActionResult.PASS) return result;
                 }
                 return ActionResult.PASS;
             });
 
-    ActionResult interact();
+    ActionResult interact(DungeonUtils.DUNGEON_CLASSES dungeonClass);
 }

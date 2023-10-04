@@ -6,14 +6,14 @@ import net.minecraft.util.ActionResult;
 
 public interface DungeonEndedCallback {
     Event<DungeonEndedCallback> EVENT = EventFactory.createArrayBacked(DungeonEndedCallback.class,
-            (listeners) -> () -> {
+            (listeners) -> (score) -> {
                 for (DungeonEndedCallback listener : listeners) {
-                    ActionResult result = listener.interact();
+                    ActionResult result = listener.interact(score);
 
                     if (result != ActionResult.PASS) return result;
                 }
                 return ActionResult.PASS;
             });
 
-    ActionResult interact();
+    ActionResult interact(int score);
 }
