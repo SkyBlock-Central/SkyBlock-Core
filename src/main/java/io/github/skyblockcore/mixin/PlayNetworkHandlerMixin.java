@@ -5,7 +5,11 @@ import io.github.skyblockcore.event.ConfigManager;
 import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
+import io.github.skyblockcore.event.dungeons.*;
+import io.github.skyblockcore.util.DungeonUtils;
+import io.github.skyblockcore.util.TextUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.ScoreboardDisplayS2CPacket;
 import net.minecraft.network.packet.s2c.play.TeamS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,16 +17,19 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static io.github.skyblockcore.SkyBlockCore.*;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class PlayNetworkHandlerMixin {
-
-
     @Inject(method = "onTeam", at = @At("TAIL"))
     void onTeam(TeamS2CPacket packet, CallbackInfo ci) {
         // Check that the player is actually on Skyblock before processing team update
         if (!SkyBlockCore.isOnSkyblock()) return;
+
+        boolean inDungeon = isInDungeon();
 
         // SkyBlock represents lines on the scoreboard as teams
         if (packet.getTeam().isEmpty()) {
@@ -35,9 +42,34 @@ public class PlayNetworkHandlerMixin {
         String scoreboardLine = (team.getPrefix().getString() + team.getSuffix().getString()).strip();
         if (scoreboardLine.length() > 0 && scoreboardLine.charAt(0) == '\u23E3') {
             // This is a location line
-            String location = scoreboardLine.split("\u23E3 ")[1];
-            if (location.equals(SkyBlockCore.getLocation())) return; // Location didn't change
-            LocationChangedCallback.EVENT.invoker().interact(SkyBlockCore.getLocation(), location);
+            String newLocation = scoreboardLine.split("\u23E3 ")[1];
+            if (newLocation.equals(SkyBlockCore.getLocation())) return; // Location didn't change
+            String oldLocation = SkyBlockCore.getLocation();
+            LocationChangedCallback.EVENT.invoker().interact(oldLocation, newLocation);
+
+            // If player is currently in a dungeon
+            if(newLocation.contains("The Catacombs") || newLocation.contains("Master Mode Catacombs")) {
+                // If they just entered the dungeon
+                if(!inDungeon) {
+                    String floor = "UNDEFINED";
+
+                    // Get the current dungeon floor
+                    Pattern pattern = Pattern.compile("\\(([^)]+)\\)");
+                    Matcher matcher = pattern.matcher(newLocation);
+                    if(matcher.find()) {
+                        floor = matcher.group(1);
+                    }
+                    DungeonUtils.setDungeonFloor(DungeonUtils.DUNGEON_FLOORS.fromString(floor));
+                    EnterDungeonCallback.EVENT.invoker().interact();
+                    LOGGER.info(TITLE + " Joined Dungeon (" + floor + ")");
+                }
+            } else {
+                // When starting dungeon and going into boss fight, the location changes to "The Catac", then back to "The Catacombs"
+                if(inDungeon && !oldLocation.equals("The Catac") && !newLocation.equals("The Catac")) {
+                    LOGGER.info(TITLE + " Left Dungeon");
+                    LeaveDungeonCallback.EVENT.invoker().interact();
+                }
+            }
         }
     }
 
