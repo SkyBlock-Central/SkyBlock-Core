@@ -1,6 +1,6 @@
 package io.github.skyblockcore.mixin;
 
-import io.github.skyblockcore.dungeons.DungeonUtils;
+import io.github.skyblockcore.Dungeons;
 import io.github.skyblockcore.event.dungeons.*;
 import io.github.skyblockcore.util.TextUtils;
 import net.minecraft.client.network.message.MessageHandler;
@@ -24,23 +24,23 @@ public class MessageHandlerMixin {
         // Dungeons
         if(isInDungeon()) {
             if(message.contains("[Healer] Ghost Healing Aura Healing")) {
-                DUNGEON_CLASS = DungeonUtils.DUNGEON_CLASSES.HEALER;
+                DUNGEON_CLASS = Dungeons.DUNGEON_CLASSES.HEALER;
                 LOGGER.info(TITLE + " Dungeon Started! Class: " + DUNGEON_CLASS);
                 DungeonStartedCallback.EVENT.invoker().interact(DUNGEON_CLASS);
             } else if(message.contains("[Mage] Intelligence")) {
-                DUNGEON_CLASS = DungeonUtils.DUNGEON_CLASSES.MAGE;
+                DUNGEON_CLASS = Dungeons.DUNGEON_CLASSES.MAGE;
                 LOGGER.info(TITLE + " Dungeon Started! Class: " + DUNGEON_CLASS);
                 DungeonStartedCallback.EVENT.invoker().interact(DUNGEON_CLASS);
             } else if(message.contains("[Berserk] Lust For Blood Damage Increase Per Hit")) {
-                DUNGEON_CLASS = DungeonUtils.DUNGEON_CLASSES.BERSERK;
+                DUNGEON_CLASS = Dungeons.DUNGEON_CLASSES.BERSERK;
                 LOGGER.info(TITLE + " Dungeon Started! Class: " + DUNGEON_CLASS);
                 DungeonStartedCallback.EVENT.invoker().interact(DUNGEON_CLASS);
             } else if(message.contains("[Archer] Extra Arrow Chance")) {
-                DUNGEON_CLASS = DungeonUtils.DUNGEON_CLASSES.ARCHER;
+                DUNGEON_CLASS = Dungeons.DUNGEON_CLASSES.ARCHER;
                 LOGGER.info(TITLE + " Dungeon Started! Class: " + DUNGEON_CLASS);
                 DungeonStartedCallback.EVENT.invoker().interact(DUNGEON_CLASS);
             } else if(message.contains("[Tank] Absorption Shield Health Required")) {
-                DUNGEON_CLASS = DungeonUtils.DUNGEON_CLASSES.TANK;
+                DUNGEON_CLASS = Dungeons.DUNGEON_CLASSES.TANK;
                 LOGGER.info(TITLE + " Dungeon Started! Class: " + DUNGEON_CLASS);
                 DungeonStartedCallback.EVENT.invoker().interact(DUNGEON_CLASS);
             }
@@ -97,7 +97,7 @@ public class MessageHandlerMixin {
             }
 
             if (message.contains("[BOSS] ") && !message.contains("[BOSS] The Watcher:")) {
-                DungeonUtils.DUNGEON_BOSSES boss = DungeonUtils.getDungeonFloor().getBoss();
+                Dungeons.DUNGEON_BOSSES boss = Dungeons.getDungeonFloor().getBoss();
                 if(!ENTERED_BOSSFIGHT) {
                     EnteredBossfightCallback.EVENT.invoker().interact(boss);
                     LOGGER.info(TITLE + " Entered Boss Fight! Boss: " + boss);

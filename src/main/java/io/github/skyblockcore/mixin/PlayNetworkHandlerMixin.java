@@ -6,7 +6,7 @@ import io.github.skyblockcore.event.JoinSkyblockCallback;
 import io.github.skyblockcore.event.LeaveSkyblockCallback;
 import io.github.skyblockcore.event.LocationChangedCallback;
 import io.github.skyblockcore.event.dungeons.*;
-import io.github.skyblockcore.dungeons.DungeonUtils;
+import io.github.skyblockcore.Dungeons;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.ScoreboardDisplayS2CPacket;
 import net.minecraft.network.packet.s2c.play.TeamS2CPacket;
@@ -57,7 +57,7 @@ public class PlayNetworkHandlerMixin {
                     if(matcher.find()) {
                         floor = matcher.group(1);
                     }
-                    DungeonUtils.setDungeonFloor(DungeonUtils.DUNGEON_FLOORS.fromString(floor));
+                    Dungeons.setDungeonFloor(Dungeons.DUNGEON_FLOORS.fromString(floor));
                     EnterDungeonCallback.EVENT.invoker().interact();
                     LOGGER.info(TITLE + " Joined Dungeon (" + floor + ")");
                 }

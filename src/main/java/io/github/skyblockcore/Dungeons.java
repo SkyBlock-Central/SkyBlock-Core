@@ -1,9 +1,9 @@
-package io.github.skyblockcore.dungeons;
+package io.github.skyblockcore;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DungeonUtils {
+public class Dungeons {
     public enum DUNGEON_FLOORS { UNDEFINED("UNDEFINED"), E("E"), F1("F1"), F2("F2"), F3("F3"), F4("F4"), F5("F5"), F6("F6"), F7("F7"), M1("M1"), M2("M2"), M3("M3"), M4("M4"), M5("M5"), M6("M6"), M7("M7");
         private static final Map<String, DUNGEON_FLOORS> map = new HashMap<>();
         private final String text;

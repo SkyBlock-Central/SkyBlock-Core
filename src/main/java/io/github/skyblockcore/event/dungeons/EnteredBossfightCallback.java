@@ -1,6 +1,6 @@
 package io.github.skyblockcore.event.dungeons;
 
-import io.github.skyblockcore.dungeons.DungeonUtils;
+import io.github.skyblockcore.Dungeons;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.util.ActionResult;
@@ -16,5 +16,5 @@ public interface EnteredBossfightCallback {
                 return ActionResult.PASS;
             });
 
-    ActionResult interact(DungeonUtils.DUNGEON_BOSSES boss);
+    ActionResult interact(Dungeons.DUNGEON_BOSSES boss);
 }

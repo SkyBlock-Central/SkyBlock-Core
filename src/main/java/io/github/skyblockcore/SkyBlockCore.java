@@ -18,7 +18,6 @@ package io.github.skyblockcore;
 
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.skyblockcore.command.SkyBlockCoreCommand;
-import io.github.skyblockcore.dungeons.DungeonUtils;
 import io.github.skyblockcore.event.*;
 import io.github.skyblockcore.event.dungeons.*;
 import net.fabricmc.api.ClientModInitializer;
@@ -52,7 +51,7 @@ public class SkyBlockCore implements ClientModInitializer {
     private static boolean IN_DUNGEON = false;
     private static boolean DUNGEON_ACTIVE = false;
     public static boolean ENTERED_BOSSFIGHT = false;
-    public static DungeonUtils.DUNGEON_CLASSES DUNGEON_CLASS = DungeonUtils.DUNGEON_CLASSES.HEALER;
+    public static Dungeons.DUNGEON_CLASSES DUNGEON_CLASS = Dungeons.DUNGEON_CLASSES.HEALER;
 
     public static boolean isOnSkyblock() {
         return ON_SKYBLOCK;
@@ -137,7 +136,7 @@ public class SkyBlockCore implements ClientModInitializer {
             IN_DUNGEON = false;
             DUNGEON_ACTIVE = false;
             ENTERED_BOSSFIGHT = false;
-            DungeonUtils.setDungeonBoss(null);
+            Dungeons.setDungeonBoss(null);
             return ActionResult.PASS;
         });
     }
