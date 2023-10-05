@@ -19,6 +19,7 @@ package io.github.skyblockcore;
 import com.mojang.brigadier.CommandDispatcher;
 import io.github.skyblockcore.command.SkyBlockCoreCommand;
 import io.github.skyblockcore.event.*;
+import io.github.skyblockcore.event.dungeons.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
@@ -40,17 +41,25 @@ public class SkyBlockCore implements ClientModInitializer {
     public static final String SKYBLOCK_SCOREBOARD = "SBScoreboard";
     public static final String HEALTH_SCOREBOARD = "health";
     private static boolean ON_SKYBLOCK = false;
+    private static String LOCATION;
+    public static String getLocation() {
+        return LOCATION;
+    }
+    public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
+
+    // Dungeons
+    private static boolean IN_DUNGEON = false;
+    private static boolean DUNGEON_ACTIVE = false;
+    public static boolean ENTERED_BOSSFIGHT = false;
+    public static Dungeons.DUNGEON_CLASSES DUNGEON_CLASS = Dungeons.DUNGEON_CLASSES.HEALER;
 
     public static boolean isOnSkyblock() {
         return ON_SKYBLOCK;
     }
-
-    public static String getLocation() {
-        return LOCATION;
+    public static boolean isInDungeon() {return IN_DUNGEON;}
+    public static boolean isDungeonActive() {
+        return DUNGEON_ACTIVE;
     }
-
-    private static String LOCATION;
-    public static final Logger LOGGER = LoggerFactory.getLogger(ModID);
 
     public static final KeyBinding copyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "skyblockcore.dev.nbtcopy",
@@ -90,6 +99,46 @@ public class SkyBlockCore implements ClientModInitializer {
             return ActionResult.PASS;
         }));
 
+        // Dungeons
+        EnterDungeonCallback.EVENT.register(() -> {
+            IN_DUNGEON = true;
+            ENTERED_BOSSFIGHT = false;
+            return ActionResult.PASS;
+        });
+        DungeonStartedCallback.EVENT.register((dungeonClass) -> {
+            DUNGEON_ACTIVE = true;
+            return ActionResult.PASS;
+        });
+        WitherKeyObtainedCallback.EVENT.register((obtainerUsername) -> {
+            if(obtainerUsername == null) return ActionResult.FAIL;
+            return ActionResult.PASS;
+        });
+        WitherDoorOpenedCallback.EVENT.register((openerUsername) -> {
+            if(openerUsername == null) return ActionResult.FAIL;
+            return ActionResult.PASS;
+        });
+        BloodKeyObtainedCallback.EVENT.register((obtainerUsername) -> {
+            if(obtainerUsername == null) return ActionResult.FAIL;
+            return ActionResult.PASS;
+        });
+        BloodDoorOpenedCallback.EVENT.register(() -> {
+            return ActionResult.PASS;
+        });
+        EnteredBossfightCallback.EVENT.register((boss) -> {
+            if(boss == null) return ActionResult.FAIL;
+            return ActionResult.PASS;
+        });
+        DungeonEndedCallback.EVENT.register((score) -> {
+            DUNGEON_ACTIVE = false;
+            return ActionResult.PASS;
+        });
+        LeaveDungeonCallback.EVENT.register(() -> {
+            IN_DUNGEON = false;
+            DUNGEON_ACTIVE = false;
+            ENTERED_BOSSFIGHT = false;
+            Dungeons.setDungeonBoss(null);
+            return ActionResult.PASS;
+        });
     }
 
     public static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess) {
